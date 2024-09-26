@@ -138,7 +138,7 @@ class Pdo extends \PDO
         throw new \RuntimeException('Not yet implemented');
     }
 
-    public function getAttribute($attribute)
+    public function getAttribute(int $attribute): mixed
     {
         throw new \RuntimeException('Not yet implemented');
     }
