@@ -2,6 +2,7 @@
 
 namespace Pseudo\UnitTest;
 
+use Iterator;
 use PHPUnit\Framework\TestCase;
 use Pseudo\Pdo;
 use Pseudo\PdoStatement;
@@ -13,15 +14,15 @@ class PdoStatementTest extends TestCase
     public function testFetchAllWithNoArguments()
     {
         $rows = [
-            'id'  => 1,
+            'id' => 1,
             'foo' => 'bar'
         ];
         $expectedFetchResult = [
             [
-                'id'  => 1,
-                0     => 1,
+                'id' => 1,
+                0 => 1,
                 'foo' => 'bar',
-                1     => 'bar'
+                1 => 'bar'
             ]
         ];
         $r = new Result([$rows]);
@@ -34,7 +35,7 @@ class PdoStatementTest extends TestCase
     public function testFetchAllWithFetchAssoc()
     {
         $rows = [
-            'id'  => 1,
+            'id' => 1,
             'foo' => 'bar'
         ];
         $r = new Result([$rows]);
@@ -47,13 +48,13 @@ class PdoStatementTest extends TestCase
     public function testFetchAllWithFetchNum()
     {
         $rows = [
-            'id'  => 1,
+            'id' => 1,
             'foo' => 'bar'
         ];
         $expectedFetchResult = [
             [
-                0     => 1,
-                1     => 'bar'
+                0 => 1,
+                1 => 'bar'
             ]
         ];
         $r = new Result([$rows]);
@@ -66,12 +67,12 @@ class PdoStatementTest extends TestCase
     public function testFetchAllWithFetchObj()
     {
         $rows = [
-            'id'  => 1,
+            'id' => 1,
             'foo' => 'bar'
         ];
         $expectedFetchResult = [
-            (object) [
-                'id'  => 1,
+            (object)[
+                'id' => 1,
                 'foo' => 'bar'
             ]
         ];
@@ -113,7 +114,7 @@ class PdoStatementTest extends TestCase
         $r = new Result();
         $r->addRow(
             [
-                'id'  => 1,
+                'id' => 1,
                 'foo' => 'bar'
             ]
         );
@@ -137,7 +138,7 @@ class PdoStatementTest extends TestCase
             'foo' => 'bar',
         ];
         $row2 = [
-            'id'  => 2,
+            'id' => 2,
             'foo' => 'baz'
         ];
 
@@ -165,7 +166,7 @@ class PdoStatementTest extends TestCase
 
         $col2 = 5678;
         $row2 = [
-            'id'  => $col2,
+            'id' => $col2,
             'foo' => 'baz'
         ];
 
@@ -208,7 +209,7 @@ class PdoStatementTest extends TestCase
             'id' => 1,
             'foo' => 'bar',
         ];
-        $testObject = (object) $row1;
+        $testObject = (object)$row1;
         $r = new Result();
         $r->addRow($row1);
         $s = new PdoStatement($r);
@@ -264,5 +265,27 @@ class PdoStatementTest extends TestCase
 
         $this->assertEquals('bar', $s->fetchColumn(1));
         $this->assertEquals(false, $s->fetchColumn(0));
+    }
+
+    public function testGetIterator(): void
+    {
+        $rows = [
+            'id' => 1,
+            'foo' => 'bar'
+        ];
+        $expectedFetchResult = [
+            [
+                'id' => 1,
+                0 => 1,
+                'foo' => 'bar',
+                1 => 'bar'
+            ]
+        ];
+        $r = new Result([$rows]);
+        $s = new PdoStatement();
+        $s->setResult($r);
+        $fetchResult = $s->getIterator();
+        $this->assertInstanceOf(Iterator::class, $fetchResult);
+        $this->assertEquals($expectedFetchResult, [...$fetchResult]);
     }
 }

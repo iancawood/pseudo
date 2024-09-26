@@ -181,4 +181,9 @@ class Pdo extends \PDO
     {
         return $this->mockedQueries;
     }
+
+    public function getIterator()
+    {
+
+    }
 }

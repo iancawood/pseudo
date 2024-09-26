@@ -2,6 +2,8 @@
 
 namespace Pseudo;
 
+use ArrayIterator;
+use Iterator;
 use Pseudo\Pdo;
 
 class PdoStatement extends \PDOStatement
@@ -273,5 +275,10 @@ class PdoStatement extends \PDOStatement
     public function getBoundParams(): array
     {
         return $this->boundParams;
+    }
+
+    public function getIterator(): Iterator
+    {
+        return new ArrayIterator($this->fetchAll());
     }
 }
