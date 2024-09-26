@@ -1,0 +1,27 @@
+---
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: phpunit
+
+      - name: Run tests - phpunit
+        run: |
+          composer install
+          ./vendor/bin/phpunit --configuration phpunit.xml.dist tests/Unit
