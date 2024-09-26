@@ -1,38 +1,38 @@
 {
-  "name": "actuallyconnor/pseudo",
-  "description": "PDO/MySQL Connection Mocking",
-  "type": "library",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Connor Smyth",
-      "email": "connorsmyth@rogers.com",
-      "homepage": "https://connorsmyth.com",
-      "role": "Developer"
+    "name": "actuallyconnor/pseudo",
+    "description": "PDO/MySQL Connection Mocking",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Connor Smyth",
+            "email": "connorsmyth@rogers.com",
+            "homepage": "https://connorsmyth.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Josh Butts",
+            "email": "josh@joshbutts.com",
+            "role": "Original Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-pdo": "*",
+        "ext-ctype": "*"
     },
-    {
-      "name": "Josh Butts",
-      "email": "josh@joshbutts.com",
-      "role": "Original Developer"
+    "require-dev": {
+        "phpunit/phpunit": "^11.3",
+        "phpunit/php-code-coverage": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pseudo\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pseudo\\UnitTest\\": "tests/Unit"
+        }
     }
-  ],
-  "require": {
-    "php": ">=8.0",
-      "ext-pdo": "*",
-      "ext-ctype": "*",
-      "phpunit/phpunit": "^11.3"
-  },
-  "require-dev": {
-    "phpunit/php-code-coverage": "^11.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "Pseudo\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Pseudo\\UnitTest\\": "tests/Unit"
-    }
-  }
 }
