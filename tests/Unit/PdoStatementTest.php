@@ -83,6 +83,19 @@ class PdoStatementTest extends TestCase
         $this->assertEquals($expectedFetchResult, $fetchResult);
     }
 
+    public function testFetchUnrecognizedFetchMode(): void
+    {
+        $rows = [
+            'id'  => 1,
+            'foo' => 'bar'
+        ];
+        $r    = new Result([$rows]);
+        $s    = new PdoStatement();
+        $s->setResult($r);
+        $fetchResult = $s->fetchAll(-1);
+        $this->assertEquals([null], $fetchResult);
+    }
+
     public function testRowCount()
     {
         $s = new PdoStatement();
