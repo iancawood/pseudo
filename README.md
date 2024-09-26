@@ -18,7 +18,7 @@ interacting with an actual database.
 ## Installation
 
 ```
-composer install actuallyconnor/pseudo
+composer require --dev actuallyconnor/pseudo
 ```
 
 ## Theory of Operation
