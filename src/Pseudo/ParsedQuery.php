@@ -17,7 +17,8 @@ class ParsedQuery
         $parser = new PHPSQLParser();
         $this->parsedQuery = $parser->parse($query);
         $this->rawQuery = $query;
-        $this->hash = sha1(serialize($this->parsedQuery));
+        $this->hash = sha1($query);
+        $test = 0;
     }
 
     public function isEqualTo($query)

@@ -4,7 +4,7 @@ namespace Pseudo;
 
 class Result
 {
-    private array $rows;
+    private array $rows = [];
     private bool $isParameterized = false;
     private string $errorCode;
     private string $errorInfo;
@@ -68,6 +68,7 @@ class Result
                     return [];
                 }
             }
+
             throw new Exception("Cannot get rows with parameters on a non-parameterized result");
         } else {
             if (!$this->isParameterized && isset($this->rows)) {

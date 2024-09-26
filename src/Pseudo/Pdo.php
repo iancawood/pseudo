@@ -2,7 +2,7 @@
 
 namespace Pseudo;
 
-use ReturnTypeWillChange;
+use InvalidArgumentException;
 
 class Pdo extends \PDO
 {
@@ -12,15 +12,11 @@ class Pdo extends \PDO
 
     /**
      * @param ResultCollection|null $collection
-     * @param string $dsn
-     * @param string|null $username
-     * @param string|null $password
-     * @param array|null $options
      */
     public function __construct(
         ResultCollection $collection = null
     ) {
-        $this->mockedQueries = $collection ?: new ResultCollection();
+        $this->mockedQueries = $collection ?? new ResultCollection();
         $this->queryLog = new QueryLog();
     }
 
@@ -107,15 +103,25 @@ class Pdo extends \PDO
     {
         $result = $this->getLastResult();
 
+        if (!$result) {
+            return false;
+        }
+
         return $result->getInsertId();
     }
 
     /**
-     * @return Result
+     * @return Result|false
+     * @throws Exception
      */
-    private function getLastResult(): Result
+    private function getLastResult(): Result|false
     {
-        $lastQuery = $this->queryLog[count($this->queryLog) - 1];
+        try {
+            $lastQuery = $this->queryLog[count($this->queryLog) - 1];
+        } catch (InvalidArgumentException) {
+            return false;
+        }
+
         $result = $this->mockedQueries->getResult($lastQuery);
 
         return $result;
@@ -164,7 +170,10 @@ class Pdo extends \PDO
      */
     public function mock($sql, $expectedResults = null, $params = null): void
     {
-        $this->mockedQueries->addQuery($sql, $expectedResults, $params);
+        $test = $this->mockedQueries->count();
+        $this->mockedQueries->addQuery($sql, $params, $expectedResults);
+        $test = $this->mockedQueries->count();
+        $hell0 = 1;
     }
 
     /**

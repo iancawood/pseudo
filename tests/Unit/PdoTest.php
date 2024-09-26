@@ -2,8 +2,8 @@
 namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
-use Pseudo\Pdo;
 use Pseudo\Exception;
+use Pseudo\Pdo;
 use Pseudo\Result;
 use Pseudo\ResultCollection;
 
@@ -43,8 +43,6 @@ class PdoTest extends TestCase
         $p->mock($sql3, $result2, $params4);
 
         $this->assertEquals(3, count($p->getMockedQueries()));
-
-
     }
 
 
@@ -156,7 +154,7 @@ class PdoTest extends TestCase
     public function testLoad()
     {
         $r = new ResultCollection();
-        $r->addQuery("SELECT 1", [[1]]);
+        $r->addQuery("SELECT 1", null, [[1]]);
         $serialized = serialize($r);
         if (file_exists('testload')) {
             unlink('testload');
@@ -171,7 +169,7 @@ class PdoTest extends TestCase
     public function testSave()
     {
         $r = new ResultCollection();
-        $r->addQuery("SELECT 1", [[1]]);
+        $r->addQuery("SELECT 1", null, [[1]]);
         $serialized = serialize($r);
         if (file_exists('testsave')) {
             unlink('testsave');
@@ -182,7 +180,7 @@ class PdoTest extends TestCase
         $this->assertEquals($r, $queries);
         unlink('testsave');
     }
-    
+
     public function testDebuggingRawQueries()
     {
         $message = null;

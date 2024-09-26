@@ -26,4 +26,12 @@ class ResultCollectionTest extends TestCase
         }
         $this->assertMatchesRegularExpression('/SELECT 123/', $message);
     }
+
+    public function testAddQuery(): void
+    {
+        $results = new ResultCollection();
+        $results->addQuery("SELECT * FROM ?", ['table'], [['test']]);
+
+        $this->assertEquals($results->count(), 1);
+    }
 }

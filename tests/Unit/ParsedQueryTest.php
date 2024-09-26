@@ -13,7 +13,7 @@ class ParsedQueryTest extends TestCase
         $q = new ParsedQuery($sql);
         $p = new \PHPSQLParser();
         $parsed = $p->parse($sql);
-        $hashed = sha1(serialize($parsed));
+        $hashed = sha1($sql);
         $this->assertEquals($hashed, $q->getHash());
     }
 

@@ -2,7 +2,9 @@
 
 namespace Pseudo;
 
-class ResultCollection implements \Countable
+use Countable;
+
+class ResultCollection implements Countable
 {
     private array $queries = [];
 
@@ -11,18 +13,16 @@ class ResultCollection implements \Countable
         return count($this->queries);
     }
 
-    public function addQuery($sql, $results, $params = null): void
+    public function addQuery(string $sql, ?array $params = null, array|Result|null $results = null): void
     {
         $query = new ParsedQuery($sql);
 
         if (is_array($results)) {
             $storedResults = new Result($results, $params);
+        } elseif ($results instanceof Result) {
+            $storedResults = $results;
         } else {
-            if ($results instanceof Result) {
-                $storedResults = $results;
-            } else {
-                $storedResults = new Result;
-            }
+            $storedResults = new Result;
         }
 
         $this->queries[$query->getHash()] = $storedResults;

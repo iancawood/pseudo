@@ -56,8 +56,9 @@ class PdoStatement extends \PDOStatement
             $this->result->setParams($params, !empty($this->boundParams));
             $success = (bool)$this->result->getRows($params ?: []);
             $this->queryLog->addQuery($this->statement);
+
             return $success;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
     }
