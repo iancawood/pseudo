@@ -44,7 +44,7 @@ class ResultCollection implements \Countable
             return $result;
         } else {
             $message = "Attempting an operation on an un-mocked query is not allowed, the raw query: "
-                       . $query->getRawQuery();
+                . $query->getRawQuery();
             throw new Exception($message);
         }
     }

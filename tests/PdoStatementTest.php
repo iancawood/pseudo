@@ -1,5 +1,12 @@
 <?php
-class PdoStatementTest extends PHPUnit_Framework_TestCase
+
+namespace Pseudo\UnitTest;
+
+use PHPUnit\Framework\TestCase;
+use Pseudo\Test\PDO;
+use Pseudo\Test\Pseudo;
+
+class PdoStatementTest extends TestCase
 {
     public function testFetchAllWithNoArguments()
     {

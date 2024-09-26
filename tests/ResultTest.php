@@ -1,5 +1,11 @@
 <?php
-class ResultTest extends PHPUnit_Framework_TestCase
+
+namespace Pseudo\UnitTest;
+
+use PHPUnit\Framework\TestCase;
+use Pseudo\Test\Pseudo;
+
+class ResultTest extends TestCase
 {
     public function testSetErrorCode()
     {

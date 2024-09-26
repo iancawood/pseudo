@@ -1,5 +1,12 @@
 <?php
-class ResultCollectionTest extends PHPUnit_Framework_TestCase
+
+namespace Pseudo\UnitTest;
+
+use PHPUnit\Framework\TestCase;
+use Pseudo\Test\Exception;
+use Pseudo\Test\Pseudo;
+
+class ResultCollectionTest extends TestCase
 {
     public function testGetResultWithoutMocking()
     {

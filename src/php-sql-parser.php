@@ -31,18 +31,19 @@
  */
 
 if (!defined('HAVE_PHP_SQL_PARSER')) {
-
     /**
      * This class implements some helper functions.
      * @author arothe
      *
      */
-    class PHPSQLParserUtils {
+    class PHPSQLParserUtils
+    {
 
-        protected $reserved;
-        protected $functions;
+        protected string|array $reserved;
+        protected string|array $functions;
 
-        public function __construct() {
+        public function __construct()
+        {
             $this->reserved = $this->getReservedWords();
             $this->functions = $this->getFunctionWords();
         }
@@ -53,7 +54,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
          * @param boolean $return if true, the formatted array is returned via return parameter
          * @return string
          */
-        protected function preprint($arr, $return = false) {
+        protected function preprint(array $arr, bool $return = false): string
+        {
             $x = "<pre>";
             $x .= print_r($arr, 1);
             $x .= "</pre>";
@@ -68,11 +70,12 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
 
         /**
          * Starts one of the strings within the given array $haystack with the string $needle?
-         * @param string|array $haystack
+         * @param array|string $haystack
          * @param string $needle
          * @return bool|int
          */
-        protected function startsWith($haystack, $needle) {
+        protected function startsWith(array|string $haystack, string $needle): bool|int
+        {
             if (is_string($needle)) {
                 $needle = array($needle);
             }
@@ -91,7 +94,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
          * @param string $needle
          * @return bool
          */
-        protected function endsWith($haystack, $needle) {
+        protected function endsWith(string $haystack, string $needle): bool
+        {
             $length = strlen($needle);
             if ($length == 0) {
                 return true;
@@ -101,95 +105,641 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return (substr($haystack, $start) === $needle);
         }
 
-        protected function getFunctionWords() {
-            $result = array('abs', 'acos', 'adddate', 'addtime', 'aes_encrypt', 'aes_decrypt', 'against', 'ascii',
-                            'asin', 'atan', 'avg', 'benchmark', 'bin', 'bit_and', 'bit_or', 'bitcount', 'bitlength',
-                            'cast', 'ceiling', 'char', 'char_length', 'character_length', 'charset', 'coalesce',
-                            'coercibility', 'collation', 'compress', 'concat', 'concat_ws', 'conection_id', 'conv',
-                            'convert', 'convert_tz', 'cos', 'cot', 'count', 'crc32', 'curdate', 'current_user',
-                            'currval', 'curtime', 'database', 'date_add', 'date_diff', 'date_format', 'date_sub',
-                            'day', 'dayname', 'dayofmonth', 'dayofweek', 'dayofyear', 'decode', 'default', 'degrees',
-                            'des_decrypt', 'des_encrypt', 'elt', 'encode', 'encrypt', 'exp', 'export_set', 'extract',
-                            'field', 'find_in_set', 'floor', 'format', 'found_rows', 'from_days', 'from_unixtime',
-                            'get_format', 'get_lock', 'group_concat', 'greatest', 'hex', 'hour', 'if', 'ifnull', 'in',
-                            'inet_aton', 'inet_ntoa', 'insert', 'instr', 'interval', 'is_free_lock', 'is_used_lock',
-                            'last_day', 'last_insert_id', 'lcase', 'least', 'left', 'length', 'ln', 'load_file',
-                            'localtime', 'localtimestamp', 'locate', 'log', 'log2', 'log10', 'lower', 'lpad', 'ltrim',
-                            'make_set', 'makedate', 'maketime', 'master_pos_wait', 'match', 'max', 'md5',
-                            'microsecond', 'mid', 'min', 'minute', 'mod', 'month', 'monthname', 'nextval', 'now',
-                            'nullif', 'oct', 'octet_length', 'old_password', 'ord', 'password', 'period_add',
-                            'period_diff', 'pi', 'position', 'pow', 'power', 'quarter', 'quote', 'radians', 'rand',
-                            'release_lock', 'repeat', 'replace', 'reverse', 'right', 'round', 'row_count', 'rpad',
-                            'rtrim', 'sec_to_time', 'second', 'session_user', 'sha', 'sha1', 'sign', 'soundex',
-                            'space', 'sqrt', 'std', 'stddev', 'stddev_pop', 'stddev_samp', 'strcmp', 'str_to_date',
-                            'subdate', 'substring', 'substring_index', 'subtime', 'sum', 'sysdate', 'system_user',
-                            'tan', 'time', 'timediff', 'timestamp', 'timestampadd', 'timestampdiff', 'time_format',
-                            'time_to_sec', 'to_days', 'trim', 'truncate', 'ucase', 'uncompress', 'uncompressed_length',
-                            'unhex', 'unix_timestamp', 'upper', 'user', 'utc_date', 'utc_time', 'utc_timestamp',
-                            'uuid', 'var_pop', 'var_samp', 'variance', 'version', 'week', 'weekday', 'weekofyear',
-                            'year', 'yearweek');
+        protected function getFunctionWords(): array|string
+        {
+            $result = array(
+                'abs',
+                'acos',
+                'adddate',
+                'addtime',
+                'aes_encrypt',
+                'aes_decrypt',
+                'against',
+                'ascii',
+                'asin',
+                'atan',
+                'avg',
+                'benchmark',
+                'bin',
+                'bit_and',
+                'bit_or',
+                'bitcount',
+                'bitlength',
+                'cast',
+                'ceiling',
+                'char',
+                'char_length',
+                'character_length',
+                'charset',
+                'coalesce',
+                'coercibility',
+                'collation',
+                'compress',
+                'concat',
+                'concat_ws',
+                'conection_id',
+                'conv',
+                'convert',
+                'convert_tz',
+                'cos',
+                'cot',
+                'count',
+                'crc32',
+                'curdate',
+                'current_user',
+                'currval',
+                'curtime',
+                'database',
+                'date_add',
+                'date_diff',
+                'date_format',
+                'date_sub',
+                'day',
+                'dayname',
+                'dayofmonth',
+                'dayofweek',
+                'dayofyear',
+                'decode',
+                'default',
+                'degrees',
+                'des_decrypt',
+                'des_encrypt',
+                'elt',
+                'encode',
+                'encrypt',
+                'exp',
+                'export_set',
+                'extract',
+                'field',
+                'find_in_set',
+                'floor',
+                'format',
+                'found_rows',
+                'from_days',
+                'from_unixtime',
+                'get_format',
+                'get_lock',
+                'group_concat',
+                'greatest',
+                'hex',
+                'hour',
+                'if',
+                'ifnull',
+                'in',
+                'inet_aton',
+                'inet_ntoa',
+                'insert',
+                'instr',
+                'interval',
+                'is_free_lock',
+                'is_used_lock',
+                'last_day',
+                'last_insert_id',
+                'lcase',
+                'least',
+                'left',
+                'length',
+                'ln',
+                'load_file',
+                'localtime',
+                'localtimestamp',
+                'locate',
+                'log',
+                'log2',
+                'log10',
+                'lower',
+                'lpad',
+                'ltrim',
+                'make_set',
+                'makedate',
+                'maketime',
+                'master_pos_wait',
+                'match',
+                'max',
+                'md5',
+                'microsecond',
+                'mid',
+                'min',
+                'minute',
+                'mod',
+                'month',
+                'monthname',
+                'nextval',
+                'now',
+                'nullif',
+                'oct',
+                'octet_length',
+                'old_password',
+                'ord',
+                'password',
+                'period_add',
+                'period_diff',
+                'pi',
+                'position',
+                'pow',
+                'power',
+                'quarter',
+                'quote',
+                'radians',
+                'rand',
+                'release_lock',
+                'repeat',
+                'replace',
+                'reverse',
+                'right',
+                'round',
+                'row_count',
+                'rpad',
+                'rtrim',
+                'sec_to_time',
+                'second',
+                'session_user',
+                'sha',
+                'sha1',
+                'sign',
+                'soundex',
+                'space',
+                'sqrt',
+                'std',
+                'stddev',
+                'stddev_pop',
+                'stddev_samp',
+                'strcmp',
+                'str_to_date',
+                'subdate',
+                'substring',
+                'substring_index',
+                'subtime',
+                'sum',
+                'sysdate',
+                'system_user',
+                'tan',
+                'time',
+                'timediff',
+                'timestamp',
+                'timestampadd',
+                'timestampdiff',
+                'time_format',
+                'time_to_sec',
+                'to_days',
+                'trim',
+                'truncate',
+                'ucase',
+                'uncompress',
+                'uncompressed_length',
+                'unhex',
+                'unix_timestamp',
+                'upper',
+                'user',
+                'utc_date',
+                'utc_time',
+                'utc_timestamp',
+                'uuid',
+                'var_pop',
+                'var_samp',
+                'variance',
+                'version',
+                'week',
+                'weekday',
+                'weekofyear',
+                'year',
+                'yearweek'
+            );
 
             return $this->changeCaseForArrayValues($result, CASE_UPPER);
         }
 
-        protected function getReservedWords() {
+        protected function getReservedWords(): array|string
+        {
             /* includes functions */
-            $result = array('abs', 'acos', 'adddate', 'addtime', 'aes_encrypt', 'aes_decrypt', 'against', 'ascii',
-                            'asin', 'atan', 'avg', 'benchmark', 'bin', 'bit_and', 'bit_or', 'bitcount', 'bitlength',
-                            'cast', 'ceiling', 'char', 'char_length', 'character_length', 'charset', 'coalesce',
-                            'coercibility', 'collation', 'compress', 'concat', 'concat_ws', 'conection_id', 'conv',
-                            'convert', 'convert_tz', 'cos', 'cot', 'count', 'crc32', 'curdate', 'current_user',
-                            'currval', 'curtime', 'database', 'date_add', 'date_diff', 'date_format', 'date_sub',
-                            'day', 'dayname', 'dayofmonth', 'dayofweek', 'dayofyear', 'decode', 'default', 'degrees',
-                            'des_decrypt', 'des_encrypt', 'elt', 'encode', 'encrypt', 'exp', 'export_set', 'extract',
-                            'field', 'find_in_set', 'floor', 'format', 'found_rows', 'from_days', 'from_unixtime',
-                            'get_format', 'get_lock', 'group_concat', 'greatest', 'hex', 'hour', 'if', 'ifnull', 'in',
-                            'inet_aton', 'inet_ntoa', 'insert', 'instr', 'interval', 'is_free_lock', 'is_used_lock',
-                            'last_day', 'last_insert_id', 'lcase', 'least', 'left', 'length', 'ln', 'load_file',
-                            'localtime', 'localtimestamp', 'locate', 'log', 'log2', 'log10', 'lower', 'lpad', 'ltrim',
-                            'make_set', 'makedate', 'maketime', 'master_pos_wait', 'match', 'max', 'md5',
-                            'microsecond', 'mid', 'min', 'minute', 'mod', 'month', 'monthname', 'nextval', 'now',
-                            'nullif', 'oct', 'octet_length', 'old_password', 'ord', 'password', 'period_add',
-                            'period_diff', 'pi', 'position', 'pow', 'power', 'quarter', 'quote', 'radians', 'rand',
-                            'release_lock', 'repeat', 'replace', 'reverse', 'right', 'round', 'row_count', 'rpad',
-                            'rtrim', 'sec_to_time', 'second', 'session_user', 'sha', 'sha1', 'sign', 'soundex',
-                            'space', 'sqrt', 'std', 'stddev', 'stddev_pop', 'stddev_samp', 'strcmp', 'str_to_date',
-                            'subdate', 'substring', 'substring_index', 'subtime', 'sum', 'sysdate', 'system_user',
-                            'tan', 'time', 'timediff', 'timestamp', 'timestampadd', 'timestampdiff', 'time_format',
-                            'time_to_sec', 'to_days', 'trim', 'truncate', 'ucase', 'uncompress', 'uncompressed_length',
-                            'unhex', 'unix_timestamp', 'upper', 'user', 'utc_date', 'utc_time', 'utc_timestamp',
-                            'uuid', 'var_pop', 'var_samp', 'variance', 'version', 'week', 'weekday', 'weekofyear',
-                            'year', 'yearweek', 'add', 'all', 'alter', 'analyze', 'and', 'as', 'asc', 'asensitive',
-                            'auto_increment', 'bdb', 'before', 'berkeleydb', 'between', 'bigint', 'binary', 'blob',
-                            'both', 'by', 'call', 'cascade', 'case', 'change', 'char', 'character', 'check', 'collate',
-                            'column', 'columns', 'condition', 'connection', 'constraint', 'continue', 'create',
-                            'cross', 'current_date', 'current_time', 'current_timestamp', 'cursor', 'database',
-                            'databases', 'day_hour', 'day_microsecond', 'day_minute', 'day_second', 'dec', 'decimal',
-                            'declare', 'default', 'delayed', 'delete', 'desc', 'describe', 'deterministic', 'distinct',
-                            'distinctrow', 'div', 'double', 'drop', 'else', 'elseif', 'end', 'enclosed', 'escaped',
-                            'exists', 'exit', 'explain', 'false', 'fetch', 'fields', 'float', 'for', 'force',
-                            'foreign', 'found', 'frac_second', 'from', 'fulltext', 'grant', 'group', 'having',
-                            'high_priority', 'hour_microsecond', 'hour_minute', 'hour_second', 'if', 'ignore', 'in',
-                            'index', 'infile', 'inner', 'innodb', 'inout', 'insensitive', 'insert', 'int', 'integer',
-                            'interval', 'into', 'io_thread', 'is', 'iterate', 'join', 'key', 'keys', 'kill', 'leading',
-                            'leave', 'left', 'like', 'limit', 'lines', 'load', 'localtime', 'localtimestamp', 'lock',
-                            'long', 'longblob', 'longtext', 'loop', 'low_priority', 'master_server_id', 'match',
-                            'mediumblob', 'mediumint', 'mediumtext', 'middleint', 'minute_microsecond',
-                            'minute_second', 'mod', 'natural', 'not', 'no_write_to_binlog', 'null', 'numeric', 'on',
-                            'optimize', 'option', 'optionally', 'or', 'order', 'out', 'outer', 'outfile', 'precision',
-                            'primary', 'privileges', 'procedure', 'purge', 'read', 'real', 'references', 'regexp',
-                            'rename', 'repeat', 'replace', 'require', 'restrict', 'return', 'revoke', 'right', 'rlike',
-                            'second_microsecond', 'select', 'sensitive', 'separator', 'set', 'show', 'smallint',
-                            'some', 'soname', 'spatial', 'specific', 'sql', 'sqlexception', 'sqlstate', 'sqlwarning',
-                            'sql_big_result', 'sql_calc_found_rows', 'sql_small_result', 'sql_tsi_day',
-                            'sql_tsi_frac_second', 'sql_tsi_hour', 'sql_tsi_minute', 'sql_tsi_month',
-                            'sql_tsi_quarter', 'sql_tsi_second', 'sql_tsi_week', 'sql_tsi_year', 'ssl', 'starting',
-                            'straight_join', 'striped', 'table', 'tables', 'terminated', 'then', 'timestampadd',
-                            'timestampdiff', 'tinyblob', 'tinyint', 'tinytext', 'to', 'trailing', 'true', 'undo',
-                            'union', 'unique', 'unlock', 'unsigned', 'update', 'usage', 'use', 'user_resources',
-                            'using', 'utc_date', 'utc_time', 'utc_timestamp', 'values', 'varbinary', 'varchar',
-                            'varcharacter', 'varying', 'when', 'where', 'while', 'with', 'write', 'xor', 'year_month',
-                            'zerofill');
+            $result = array(
+                'abs',
+                'acos',
+                'adddate',
+                'addtime',
+                'aes_encrypt',
+                'aes_decrypt',
+                'against',
+                'ascii',
+                'asin',
+                'atan',
+                'avg',
+                'benchmark',
+                'bin',
+                'bit_and',
+                'bit_or',
+                'bitcount',
+                'bitlength',
+                'cast',
+                'ceiling',
+                'char',
+                'char_length',
+                'character_length',
+                'charset',
+                'coalesce',
+                'coercibility',
+                'collation',
+                'compress',
+                'concat',
+                'concat_ws',
+                'conection_id',
+                'conv',
+                'convert',
+                'convert_tz',
+                'cos',
+                'cot',
+                'count',
+                'crc32',
+                'curdate',
+                'current_user',
+                'currval',
+                'curtime',
+                'database',
+                'date_add',
+                'date_diff',
+                'date_format',
+                'date_sub',
+                'day',
+                'dayname',
+                'dayofmonth',
+                'dayofweek',
+                'dayofyear',
+                'decode',
+                'default',
+                'degrees',
+                'des_decrypt',
+                'des_encrypt',
+                'elt',
+                'encode',
+                'encrypt',
+                'exp',
+                'export_set',
+                'extract',
+                'field',
+                'find_in_set',
+                'floor',
+                'format',
+                'found_rows',
+                'from_days',
+                'from_unixtime',
+                'get_format',
+                'get_lock',
+                'group_concat',
+                'greatest',
+                'hex',
+                'hour',
+                'if',
+                'ifnull',
+                'in',
+                'inet_aton',
+                'inet_ntoa',
+                'insert',
+                'instr',
+                'interval',
+                'is_free_lock',
+                'is_used_lock',
+                'last_day',
+                'last_insert_id',
+                'lcase',
+                'least',
+                'left',
+                'length',
+                'ln',
+                'load_file',
+                'localtime',
+                'localtimestamp',
+                'locate',
+                'log',
+                'log2',
+                'log10',
+                'lower',
+                'lpad',
+                'ltrim',
+                'make_set',
+                'makedate',
+                'maketime',
+                'master_pos_wait',
+                'match',
+                'max',
+                'md5',
+                'microsecond',
+                'mid',
+                'min',
+                'minute',
+                'mod',
+                'month',
+                'monthname',
+                'nextval',
+                'now',
+                'nullif',
+                'oct',
+                'octet_length',
+                'old_password',
+                'ord',
+                'password',
+                'period_add',
+                'period_diff',
+                'pi',
+                'position',
+                'pow',
+                'power',
+                'quarter',
+                'quote',
+                'radians',
+                'rand',
+                'release_lock',
+                'repeat',
+                'replace',
+                'reverse',
+                'right',
+                'round',
+                'row_count',
+                'rpad',
+                'rtrim',
+                'sec_to_time',
+                'second',
+                'session_user',
+                'sha',
+                'sha1',
+                'sign',
+                'soundex',
+                'space',
+                'sqrt',
+                'std',
+                'stddev',
+                'stddev_pop',
+                'stddev_samp',
+                'strcmp',
+                'str_to_date',
+                'subdate',
+                'substring',
+                'substring_index',
+                'subtime',
+                'sum',
+                'sysdate',
+                'system_user',
+                'tan',
+                'time',
+                'timediff',
+                'timestamp',
+                'timestampadd',
+                'timestampdiff',
+                'time_format',
+                'time_to_sec',
+                'to_days',
+                'trim',
+                'truncate',
+                'ucase',
+                'uncompress',
+                'uncompressed_length',
+                'unhex',
+                'unix_timestamp',
+                'upper',
+                'user',
+                'utc_date',
+                'utc_time',
+                'utc_timestamp',
+                'uuid',
+                'var_pop',
+                'var_samp',
+                'variance',
+                'version',
+                'week',
+                'weekday',
+                'weekofyear',
+                'year',
+                'yearweek',
+                'add',
+                'all',
+                'alter',
+                'analyze',
+                'and',
+                'as',
+                'asc',
+                'asensitive',
+                'auto_increment',
+                'bdb',
+                'before',
+                'berkeleydb',
+                'between',
+                'bigint',
+                'binary',
+                'blob',
+                'both',
+                'by',
+                'call',
+                'cascade',
+                'case',
+                'change',
+                'char',
+                'character',
+                'check',
+                'collate',
+                'column',
+                'columns',
+                'condition',
+                'connection',
+                'constraint',
+                'continue',
+                'create',
+                'cross',
+                'current_date',
+                'current_time',
+                'current_timestamp',
+                'cursor',
+                'database',
+                'databases',
+                'day_hour',
+                'day_microsecond',
+                'day_minute',
+                'day_second',
+                'dec',
+                'decimal',
+                'declare',
+                'default',
+                'delayed',
+                'delete',
+                'desc',
+                'describe',
+                'deterministic',
+                'distinct',
+                'distinctrow',
+                'div',
+                'double',
+                'drop',
+                'else',
+                'elseif',
+                'end',
+                'enclosed',
+                'escaped',
+                'exists',
+                'exit',
+                'explain',
+                'false',
+                'fetch',
+                'fields',
+                'float',
+                'for',
+                'force',
+                'foreign',
+                'found',
+                'frac_second',
+                'from',
+                'fulltext',
+                'grant',
+                'group',
+                'having',
+                'high_priority',
+                'hour_microsecond',
+                'hour_minute',
+                'hour_second',
+                'if',
+                'ignore',
+                'in',
+                'index',
+                'infile',
+                'inner',
+                'innodb',
+                'inout',
+                'insensitive',
+                'insert',
+                'int',
+                'integer',
+                'interval',
+                'into',
+                'io_thread',
+                'is',
+                'iterate',
+                'join',
+                'key',
+                'keys',
+                'kill',
+                'leading',
+                'leave',
+                'left',
+                'like',
+                'limit',
+                'lines',
+                'load',
+                'localtime',
+                'localtimestamp',
+                'lock',
+                'long',
+                'longblob',
+                'longtext',
+                'loop',
+                'low_priority',
+                'master_server_id',
+                'match',
+                'mediumblob',
+                'mediumint',
+                'mediumtext',
+                'middleint',
+                'minute_microsecond',
+                'minute_second',
+                'mod',
+                'natural',
+                'not',
+                'no_write_to_binlog',
+                'null',
+                'numeric',
+                'on',
+                'optimize',
+                'option',
+                'optionally',
+                'or',
+                'order',
+                'out',
+                'outer',
+                'outfile',
+                'precision',
+                'primary',
+                'privileges',
+                'procedure',
+                'purge',
+                'read',
+                'real',
+                'references',
+                'regexp',
+                'rename',
+                'repeat',
+                'replace',
+                'require',
+                'restrict',
+                'return',
+                'revoke',
+                'right',
+                'rlike',
+                'second_microsecond',
+                'select',
+                'sensitive',
+                'separator',
+                'set',
+                'show',
+                'smallint',
+                'some',
+                'soname',
+                'spatial',
+                'specific',
+                'sql',
+                'sqlexception',
+                'sqlstate',
+                'sqlwarning',
+                'sql_big_result',
+                'sql_calc_found_rows',
+                'sql_small_result',
+                'sql_tsi_day',
+                'sql_tsi_frac_second',
+                'sql_tsi_hour',
+                'sql_tsi_minute',
+                'sql_tsi_month',
+                'sql_tsi_quarter',
+                'sql_tsi_second',
+                'sql_tsi_week',
+                'sql_tsi_year',
+                'ssl',
+                'starting',
+                'straight_join',
+                'striped',
+                'table',
+                'tables',
+                'terminated',
+                'then',
+                'timestampadd',
+                'timestampdiff',
+                'tinyblob',
+                'tinyint',
+                'tinytext',
+                'to',
+                'trailing',
+                'true',
+                'undo',
+                'union',
+                'unique',
+                'unlock',
+                'unsigned',
+                'update',
+                'usage',
+                'use',
+                'user_resources',
+                'using',
+                'utc_date',
+                'utc_time',
+                'utc_timestamp',
+                'values',
+                'varbinary',
+                'varchar',
+                'varcharacter',
+                'varying',
+                'when',
+                'where',
+                'while',
+                'with',
+                'write',
+                'xor',
+                'year_month',
+                'zerofill'
+            );
 
             return $this->changeCaseForArrayValues($result, CASE_UPPER);
         }
@@ -202,7 +752,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
          * @return array|string
          * @throws InvalidArgumentException if the first argument is not an array
          */
-        protected function changeCaseForArrayValues($arr, $case) {
+        protected function changeCaseForArrayValues(array|string $arr, int $case): array|string
+        {
             if (!is_array($arr)) {
                 throw new InvalidArgumentException("first argument must be an array");
             }
@@ -225,25 +776,50 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
      * @author arothe
      *
      */
-    class PHPSQLLexer extends PHPSQLParserUtils {
+    class PHPSQLLexer extends PHPSQLParserUtils
+    {
 
-        public function __construct() {
+        public function __construct()
+        {
             parent::__construct();
         }
 
-        public function split($sql) {
-            if (!is_string($sql)) {
-                throw new InvalidParameterException($sql);
-            }
-
+        public function split(string $sql): array
+        {
             $tokens = array();
             $token = "";
-            $splitter = array("\r\n", "!=", ">=", "<=", "<>", "\\", "&&", ">", "<", "|", "=", "^", "(", ")", "\t",
-                              "\n", "'", "\"", "`", ",", "@", " ", "+", "-", "*", "/", ";");
+            $splitter = array(
+                "\r\n",
+                "!=",
+                ">=",
+                "<=",
+                "<>",
+                "\\",
+                "&&",
+                ">",
+                "<",
+                "|",
+                "=",
+                "^",
+                "(",
+                ")",
+                "\t",
+                "\n",
+                "'",
+                "\"",
+                "`",
+                ",",
+                "@",
+                " ",
+                "+",
+                "-",
+                "*",
+                "/",
+                ";"
+            );
 
             while (strlen($sql) > 0) {
-
-                $idx = $this->startsWith($sql, $splitter);
+                $idx = $this->startsWith($splitter, $sql);
                 if ($idx === false) {
                     $token .= $sql[0];
                     $sql = substr($sql, 1);
@@ -269,11 +845,11 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $tokens;
         }
 
-        private function balanceBackticks($tokens) {
+        private function balanceBackticks(array $tokens): array
+        {
             $i = 0;
             $cnt = count($tokens);
             while ($i < $cnt) {
-
                 if (!isset($tokens[$i])) {
                     $i++;
                     continue;
@@ -293,12 +869,11 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
 
         # backticks are not balanced within one token, so we have
         # to re-combine some tokens
-        private function balanceCharacter($tokens, $idx, $char) {
-
+        private function balanceCharacter(array $tokens, int $idx, string $char): array
+        {
             $token_count = count($tokens);
             $i = $idx + 1;
             while ($i < $token_count) {
-
                 if (!isset($tokens[$i])) {
                     $i++;
                     continue;
@@ -324,12 +899,11 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
          * does the token starts with a dot?
          * concat it with the previous token
          */
-        private function concatColReferences($tokens) {
-
+        private function concatColReferences(array $tokens): array
+        {
             $cnt = count($tokens);
             $i = 0;
             while ($i < $cnt) {
-
                 if (!isset($tokens[$i])) {
                     $i++;
                     continue;
@@ -338,7 +912,6 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                 $trim = trim($tokens[$i]);
 
                 if ($this->startsWith($tokens[$i], '.') !== false) {
-
                     // concat the previous tokens, till the token has been changed
                     $k = $i - 1;
                     $len = strlen($tokens[$i]);
@@ -354,7 +927,6 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                 }
 
                 if ($this->endsWith($tokens[$i], '.')) {
-
                     // concat the next tokens, till the token has been changed
                     $k = $i + 1;
                     $len = strlen($tokens[$i]);
@@ -375,11 +947,11 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return array_values($tokens);
         }
 
-        private function concatEscapeSequences($tokens) {
+        private function concatEscapeSequences(array $tokens): array
+        {
             $tokenCount = count($tokens);
             $i = 0;
             while ($i < $tokenCount) {
-
                 if ($this->endsWith($tokens[$i], "\\")) {
                     $i++;
                     if (isset($tokens[$i])) {
@@ -392,7 +964,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return array_values($tokens);
         }
 
-        private function balanceParenthesis($tokens) {
+        private function balanceParenthesis(array $tokens): array
+        {
             $token_count = count($tokens);
             $i = 0;
             while ($i < $token_count) {
@@ -427,11 +1000,12 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
      * @author greenlion@gmail.com
      * @author arothe@phosco.info
      */
-    class PHPSQLParser extends PHPSQLParserUtils {
+    class PHPSQLParser extends PHPSQLParserUtils
+    {
+        private PHPSQLLexer $lexer;
 
-        private $lexer;
-
-        public function __construct($sql = false, $calcPositions = false) {
+        public function __construct($sql = false, $calcPositions = false)
+        {
             parent::__construct();
             $this->lexer = new PHPSQLLexer();
 
@@ -440,7 +1014,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             }
         }
 
-        public function parse($sql, $calcPositions = false) {
+        public function parse($sql, $calcPositions = false)
+        {
             #lex the SQL statement
             $inputArray = $this->split_sql($sql);
 
@@ -461,11 +1036,11 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             }
 
             # store the parsed queries
-            $this->parsed = $queries;
-            return $this->parsed;
+            return $queries;
         }
 
-        private function processUnion($inputArray) {
+        private function processUnion(array $inputArray): array
+        {
             $outputArray = array();
 
             #sometimes the parser needs to skip ahead until a particular
@@ -544,10 +1119,10 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
          * @param array $queries
          * @return array
          */
-        private function processMySQLUnion($queries) {
+        private function processMySQLUnion(array $queries): array
+        {
             $unionTypes = array('UNION', 'UNION ALL');
             foreach ($unionTypes as $unionType) {
-
                 if (empty($queries[$unionType])) {
                     continue;
                 }
@@ -574,7 +1149,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $queries;
         }
 
-        private function isUnion($queries) {
+        private function isUnion(array $queries): bool
+        {
             $unionTypes = array('UNION', 'UNION ALL');
             foreach ($unionTypes as $unionType) {
                 if (!empty($queries[$unionType])) {
@@ -586,14 +1162,16 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
 
         #this function splits up a SQL statement into easy to "parse"
         #tokens for the SQL processor
-        private function split_sql($sql) {
+        private function split_sql(string $sql): array
+        {
             return $this->lexer->split($sql);
         }
 
         /* This function breaks up the SQL statement into logical sections.
          Some sections are then further handled by specialized functions.
          */
-        private function processSQL(&$tokens) {
+        private function processSQL(array &$tokens)
+        {
             $prev_category = "";
             $token_category = "";
             $skip_next = false;
@@ -601,7 +1179,6 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
 
             $tokenCount = count($tokens);
             for ($tokenNumber = 0; $tokenNumber < $tokenCount; ++$tokenNumber) {
-
                 $token = $tokens[$tokenNumber];
                 $trim = trim($token); # this removes also \n and \t!
 
@@ -628,232 +1205,227 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
 
                 $upper = strtoupper($trim);
                 switch ($upper) {
+                    /* Tokens that get their own sections. These keywords have subclauses. */
+                    case 'SELECT':
+                    case 'ORDER':
+                    case 'LIMIT':
+                    case 'SET':
+                    case 'DUPLICATE':
+                    case 'VALUES':
+                    case 'GROUP':
+                    case 'ORDER':
+                    case 'HAVING':
+                    case 'WHERE':
+                    case 'RENAME':
+                    case 'CALL':
+                    case 'PROCEDURE':
+                    case 'FUNCTION':
+                    case 'DATABASE':
+                    case 'SERVER':
+                    case 'LOGFILE':
+                    case 'DEFINER':
+                    case 'RETURNS':
+                    case 'EVENT':
+                    case 'TABLESPACE':
+                    case 'TRIGGER':
+                    case 'DATA':
+                    case 'DO':
+                    case 'PASSWORD':
+                    case 'PLUGIN':
+                    case 'FROM':
+                    case 'FLUSH':
+                    case 'KILL':
+                    case 'RESET':
+                    case 'START':
+                    case 'STOP':
+                    case 'PURGE':
+                    case 'EXECUTE':
+                    case 'PREPARE':
+                    case 'DEALLOCATE':
+                        if ($trim == 'DEALLOCATE') {
+                            $skip_next = true;
+                        }
+                        /* this FROM is different from FROM in other DML (not join related) */
+                        if ($token_category == 'PREPARE' && $upper == 'FROM') {
+                            continue 2;
+                        }
 
-                /* Tokens that get their own sections. These keywords have subclauses. */
-                case 'SELECT':
-                case 'ORDER':
-                case 'LIMIT':
-                case 'SET':
-                case 'DUPLICATE':
-                case 'VALUES':
-                case 'GROUP':
-                case 'ORDER':
-                case 'HAVING':
-                case 'WHERE':
-                case 'RENAME':
-                case 'CALL':
-                case 'PROCEDURE':
-                case 'FUNCTION':
-                case 'DATABASE':
-                case 'SERVER':
-                case 'LOGFILE':
-                case 'DEFINER':
-                case 'RETURNS':
-                case 'EVENT':
-                case 'TABLESPACE':
-                case 'TRIGGER':
-                case 'DATA':
-                case 'DO':
-                case 'PASSWORD':
-                case 'PLUGIN':
-                case 'FROM':
-                case 'FLUSH':
-                case 'KILL':
-                case 'RESET':
-                case 'START':
-                case 'STOP':
-                case 'PURGE':
-                case 'EXECUTE':
-                case 'PREPARE':
-                case 'DEALLOCATE':
-                    if ($trim == 'DEALLOCATE') {
-                        $skip_next = true;
-                    }
-                    /* this FROM is different from FROM in other DML (not join related) */
-                    if ($token_category == 'PREPARE' && $upper == 'FROM') {
-                        continue 2;
-                    }
-
-                    $token_category = $upper;
-                    break;
-
-                case 'INTO':
-                # prevent wrong handling of CACHE within LOAD INDEX INTO CACHE...
-                    if ($prev_category === 'LOAD') {
-                        $out[$prev_category][] = $upper;
-                        continue 2;
-                    }
-                    $token_category = $upper;
-                    break;
-
-                case 'USER':
-                # prevent wrong processing as keyword
-                    if (in_array($prev_category, array('CREATE', 'RENAME', 'DROP'), true)) {
                         $token_category = $upper;
-                    }
-                    break;
+                        break;
 
-                case 'VIEW':
-                # prevent wrong processing as keyword
-                    if (in_array($prev_category, array('CREATE', 'ALTER', 'DROP'), true)) {
+                    case 'INTO':
+                        # prevent wrong handling of CACHE within LOAD INDEX INTO CACHE...
+                        if ($prev_category === 'LOAD') {
+                            $out[$prev_category][] = $upper;
+                            continue 2;
+                        }
                         $token_category = $upper;
-                    }
-                    break;
+                        break;
 
-                /* These tokens get their own section, but have no subclauses.
-                 These tokens identify the statement but have no specific subclauses of their own. */
-                case 'DELETE':
-                case 'ALTER':
-                case 'INSERT':
-                case 'REPLACE':
-                case 'TRUNCATE':
-                case 'CREATE':
-                case 'TRUNCATE':
-                case 'OPTIMIZE':
-                case 'GRANT':
-                case 'REVOKE':
-                case 'SHOW':
-                case 'HANDLER':
-                case 'LOAD':
-                case 'ROLLBACK':
-                case 'SAVEPOINT':
-                case 'UNLOCK':
-                case 'INSTALL':
-                case 'UNINSTALL':
-                case 'ANALZYE':
-                case 'BACKUP':
-                case 'CHECK':
-                case 'CHECKSUM':
-                case 'REPAIR':
-                case 'RESTORE':
-                case 'DESCRIBE':
-                case 'EXPLAIN':
-                case 'USE':
-                case 'HELP':
-                    $token_category = $upper; /* set the category in case these get subclauses
+                    case 'USER':
+                        # prevent wrong processing as keyword
+                        if (in_array($prev_category, array('CREATE', 'RENAME', 'DROP'), true)) {
+                            $token_category = $upper;
+                        }
+                        break;
+
+                    case 'VIEW':
+                        # prevent wrong processing as keyword
+                        if (in_array($prev_category, array('CREATE', 'ALTER', 'DROP'), true)) {
+                            $token_category = $upper;
+                        }
+                        break;
+
+                    /* These tokens get their own section, but have no subclauses.
+                     These tokens identify the statement but have no specific subclauses of their own. */
+                    case 'DELETE':
+                    case 'ALTER':
+                    case 'INSERT':
+                    case 'REPLACE':
+                    case 'TRUNCATE':
+                    case 'CREATE':
+                    case 'TRUNCATE':
+                    case 'OPTIMIZE':
+                    case 'GRANT':
+                    case 'REVOKE':
+                    case 'SHOW':
+                    case 'HANDLER':
+                    case 'LOAD':
+                    case 'ROLLBACK':
+                    case 'SAVEPOINT':
+                    case 'UNLOCK':
+                    case 'INSTALL':
+                    case 'UNINSTALL':
+                    case 'ANALZYE':
+                    case 'BACKUP':
+                    case 'CHECK':
+                    case 'CHECKSUM':
+                    case 'REPAIR':
+                    case 'RESTORE':
+                    case 'DESCRIBE':
+                    case 'EXPLAIN':
+                    case 'USE':
+                    case 'HELP':
+                        $token_category = $upper; /* set the category in case these get subclauses
                                               in a future version of MySQL */
-                    $out[$upper][0] = $upper;
-                    continue 2;
-                    break;
-
-                case 'CACHE':
-                    if (($prev_category === "") || (in_array($prev_category, array('RESET', 'FLUSH', 'LOAD')))) {
-                        $token_category = $upper;
-                        continue 2;
-                    }
-                    break;
-
-                /* This is either LOCK TABLES or SELECT ... LOCK IN SHARE MODE*/
-                case 'LOCK':
-                    if ($token_category == "") {
-                        $token_category = $upper;
-                        $out[$upper][0] = $upper;
-                    } else {
-                        $trim = 'LOCK IN SHARE MODE';
-                        $skip_next = true;
-                        $out['OPTIONS'][] = $trim;
-                    }
-                    continue 2;
-                    break;
-
-                case 'USING': /* USING in FROM clause is different from USING w/ prepared statement*/
-                    if ($token_category == 'EXECUTE') {
-                        $token_category = $upper;
-                        continue 2;
-                    }
-                    if ($token_category == 'FROM' && !empty($out['DELETE'])) {
-                        $token_category = $upper;
-                        continue 2;
-                    }
-                    break;
-
-                /* DROP TABLE is different from ALTER TABLE DROP ... */
-                case 'DROP':
-                    if ($token_category != 'ALTER') {
-                        $token_category = $upper;
                         $out[$upper][0] = $upper;
                         continue 2;
-                    }
-                    break;
+                        break;
 
-                case 'FOR':
-                    $skip_next = true;
-                    $out['OPTIONS'][] = 'FOR UPDATE';
-                    continue 2;
-                    break;
+                    case 'CACHE':
+                        if (($prev_category === "") || (in_array($prev_category, array('RESET', 'FLUSH', 'LOAD')))) {
+                            $token_category = $upper;
+                            continue 2;
+                        }
+                        break;
 
-                case 'UPDATE':
-                    if ($token_category == "") {
-                        $token_category = $upper;
+                    /* This is either LOCK TABLES or SELECT ... LOCK IN SHARE MODE*/
+                    case 'LOCK':
+                        if ($token_category == "") {
+                            $token_category = $upper;
+                            $out[$upper][0] = $upper;
+                        } else {
+                            $trim = 'LOCK IN SHARE MODE';
+                            $skip_next = true;
+                            $out['OPTIONS'][] = $trim;
+                        }
                         continue 2;
+                        break;
 
-                    }
-                    if ($token_category == 'DUPLICATE') {
-                        continue 2;
-                    }
-                    break;
+                    case 'USING': /* USING in FROM clause is different from USING w/ prepared statement*/
+                        if ($token_category == 'EXECUTE') {
+                            $token_category = $upper;
+                            continue 2;
+                        }
+                        if ($token_category == 'FROM' && !empty($out['DELETE'])) {
+                            $token_category = $upper;
+                            continue 2;
+                        }
+                        break;
 
-                case 'START':
-                    $trim = "BEGIN";
-                    $out[$upper][0] = $upper;
-                    $skip_next = true;
-                    break;
+                    /* DROP TABLE is different from ALTER TABLE DROP ... */
+                    case 'DROP':
+                        if ($token_category != 'ALTER') {
+                            $token_category = $upper;
+                            $out[$upper][0] = $upper;
+                            continue 2;
+                        }
+                        break;
 
-                /* These tokens are ignored. */
-                case 'BY':
-                case 'ALL':
-                case 'SHARE':
-                case 'MODE':
-                case 'TO':
-                case ';':
-                    continue 2;
-                    break;
-
-                case 'KEY':
-                    if ($token_category == 'DUPLICATE') {
-                        continue 2;
-                    }
-                    break;
-
-                /* These tokens set particular options for the statement.  They never stand alone.*/
-                case 'DISTINCTROW':
-                    $trim = 'DISTINCT';
-                case 'DISTINCT':
-                case 'HIGH_PRIORITY':
-                case 'LOW_PRIORITY':
-                case 'DELAYED':
-                case 'IGNORE':
-                case 'FORCE':
-                case 'STRAIGHT_JOIN':
-                case 'SQL_SMALL_RESULT':
-                case 'SQL_BIG_RESULT':
-                case 'QUICK':
-                case 'SQL_BUFFER_RESULT':
-                case 'SQL_CACHE':
-                case 'SQL_NO_CACHE':
-                case 'SQL_CALC_FOUND_ROWS':
-                    $out['OPTIONS'][] = $upper;
-                    continue 2;
-                    break;
-
-                case 'WITH':
-                    if ($token_category == 'GROUP') {
+                    case 'FOR':
                         $skip_next = true;
-                        $out['OPTIONS'][] = 'WITH ROLLUP';
+                        $out['OPTIONS'][] = 'FOR UPDATE';
                         continue 2;
-                    }
-                    break;
+                        break;
 
-                case 'AS':
-                    break;
+                    case 'UPDATE':
+                        if ($token_category == "") {
+                            $token_category = $upper;
+                            continue 2;
+                        }
+                        if ($token_category == 'DUPLICATE') {
+                            continue 2;
+                        }
+                        break;
 
-                case '':
-                case ',':
-                case ';':
-                    break;
+                    case 'START':
+                        $trim = "BEGIN";
+                        $out[$upper][0] = $upper;
+                        $skip_next = true;
+                        break;
 
-                default:
-                    break;
+                    /* These tokens are ignored. */
+                    case 'BY':
+                    case 'ALL':
+                    case 'SHARE':
+                    case 'MODE':
+                    case 'TO':
+                    case ';':
+                        continue 2;
+                        break;
+
+                    case 'KEY':
+                        if ($token_category == 'DUPLICATE') {
+                            continue 2;
+                        }
+                        break;
+
+                    /* These tokens set particular options for the statement.  They never stand alone.*/
+                    case 'DISTINCTROW':
+                        $trim = 'DISTINCT';
+                    case 'DISTINCT':
+                    case 'HIGH_PRIORITY':
+                    case 'LOW_PRIORITY':
+                    case 'DELAYED':
+                    case 'IGNORE':
+                    case 'FORCE':
+                    case 'STRAIGHT_JOIN':
+                    case 'SQL_SMALL_RESULT':
+                    case 'SQL_BIG_RESULT':
+                    case 'QUICK':
+                    case 'SQL_BUFFER_RESULT':
+                    case 'SQL_CACHE':
+                    case 'SQL_NO_CACHE':
+                    case 'SQL_CALC_FOUND_ROWS':
+                        $out['OPTIONS'][] = $upper;
+                        continue 2;
+                        break;
+
+                    case 'WITH':
+                        if ($token_category == 'GROUP') {
+                            $skip_next = true;
+                            $out['OPTIONS'][] = 'WITH ROLLUP';
+                            continue 2;
+                        }
+                        break;
+
+                    case '':
+                    case ',':
+                    case ';':
+                        break;
+
+                    default:
+                        break;
                 }
 
                 # remove obsolete category after union (empty category because of
@@ -868,7 +1440,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $this->processSQLParts($out);
         }
 
-        private function processSQLParts($out) {
+        private function processSQLParts($out)
+        {
             if (!$out) {
                 return false;
             }
@@ -927,12 +1500,14 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
         /* A SET list is simply a list of key = value expressions separated by comma (,).
          This function produces a list of the key/value expressions.
          */
-        private function getColumn($base_expr) {
+        private function getColumn(string $base_expr): array
+        {
             $column = $this->process_expr_list($this->split_sql($base_expr));
             return array('expr_type' => 'expression', 'base_expr' => trim($base_expr), 'sub_tree' => $column);
         }
 
-        private function process_set_list($tokens) {
+        private function process_set_list(array $tokens): array
+        {
             $expr = array();
             $base_expr = "";
 
@@ -959,7 +1534,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
          start,end are set.  If only end is provided in the query
          then start is set to 0.
          */
-        private function process_limit($tokens) {
+        private function process_limit(array $tokens): array
+        {
             $rowcount = "";
             $offset = "";
 
@@ -972,7 +1548,7 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                     $comma = $i;
                     break;
                 }
-                if ($trim ===  "OFFSET") {
+                if ($trim === "OFFSET") {
                     $comma = $i;
                     $exchange = true;
                     break;
@@ -1004,7 +1580,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
 
          Finally, at the end, the epxression list is returned.
          */
-        private function process_select(&$tokens) {
+        private function process_select(array &$tokens): array
+        {
             $expression = "";
             $expr = array();
             foreach ($tokens as $token) {
@@ -1021,7 +1598,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $expr;
         }
 
-        private function revokeEscaping($sql) {
+        private function revokeEscaping(string $sql): array|string
+        {
             $sql = trim($sql);
             if (($sql[0] === '`') && ($sql[strlen($sql) - 1] === '`')) {
                 $sql = substr($sql, 1, -1);
@@ -1032,8 +1610,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
         /* This fuction processes each SELECT clause.  We determine what (if any) alias
          is provided, and we set the type of expression.
          */
-        private function process_select_expr($expression) {
-
+        private function process_select_expr(string $expression): array
+        {
             $tokens = $this->split_sql($expression);
             $token_count = count($tokens);
 
@@ -1078,17 +1656,18 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             # it can be an alias without an AS
             $last = array_pop($stripped);
             if (!$alias && $last['expr_type'] == 'colref') {
-
                 # check the token before the colref
                 $prev = array_pop($stripped);
 
                 if (isset($prev)
-                        && ($prev['expr_type'] == 'reserved' || $prev['expr_type'] == 'const'
-                                || $prev['expr_type'] == 'function' || $prev['expr_type'] == 'expression'
-                                || $prev['expr_type'] == 'subquery' || $prev['expr_type'] == 'colref')) {
-
-                    $alias = array('as' => false, 'name' => trim($last['base_expr']),
-                                   'base_expr' => trim($last['base_expr']));
+                    && ($prev['expr_type'] == 'reserved' || $prev['expr_type'] == 'const'
+                        || $prev['expr_type'] == 'function' || $prev['expr_type'] == 'expression'
+                        || $prev['expr_type'] == 'subquery' || $prev['expr_type'] == 'colref')) {
+                    $alias = array(
+                        'as' => false,
+                        'name' => trim($last['base_expr']),
+                        'base_expr' => trim($last['base_expr'])
+                    );
                     #remove the last token
                     array_pop($tokens);
                     $base_expr = join("", $tokens);
@@ -1117,12 +1696,16 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                 }
             }
 
-            return array('expr_type' => $type, 'alias' => $alias, 'base_expr' => trim($base_expr),
-                         'sub_tree' => $processed);
+            return array(
+                'expr_type' => $type,
+                'alias' => $alias,
+                'base_expr' => trim($base_expr),
+                'sub_tree' => $processed
+            );
         }
 
-        private function process_from(&$tokens) {
-
+        private function process_from(array &$tokens): array
+        {
             $parseInfo = $this->initParseInfoForFrom();
             $expr = array();
 
@@ -1143,101 +1726,109 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                 }
 
                 switch ($upper) {
-                case 'OUTER':
-                case 'LEFT':
-                case 'RIGHT':
-                case 'NATURAL':
-                case 'CROSS':
-                case ',':
-                case 'JOIN':
-                case 'INNER':
-                    break;
+                    case 'OUTER':
+                    case 'LEFT':
+                    case 'RIGHT':
+                    case 'NATURAL':
+                    case 'CROSS':
+                    case ',':
+                    case 'JOIN':
+                    case 'INNER':
+                        break;
 
-                default:
-                    $parseInfo['expression'] .= $token;
-                    if ($parseInfo['ref_type'] !== false) { # all after ON / USING
-                        $parseInfo['ref_expr'] .= $token;
-                    }
-                    break;
+                    default:
+                        $parseInfo['expression'] .= $token;
+                        if ($parseInfo['ref_type'] !== false) { # all after ON / USING
+                            $parseInfo['ref_expr'] .= $token;
+                        }
+                        break;
                 }
 
                 switch ($upper) {
-                case 'AS':
-                    $parseInfo['alias'] = array('as' => true, 'name' => "", 'base_expr' => $token);
-                    $parseInfo['token_count']++;
-                    $n = 1;
-                    $str = "";
-                    while ($str == "") {
-                        $parseInfo['alias']['base_expr'] .= ($tokens[$i + $n] === "" ? " " : $tokens[$i + $n]);
-                        $str = trim($tokens[$i + $n]);
-                        ++$n;
-                    }
-                    $parseInfo['alias']['name'] = $str;
-                    $parseInfo['alias']['base_expr'] = trim($parseInfo['alias']['base_expr']);
-                    continue 2;
-
-                case 'INDEX':
-                    if ($token_category == 'CREATE') {
-                        $token_category = $upper;
-                        continue 2;
-                    }
-
-                    break;
-
-                case 'USING':
-                case 'ON':
-                    $parseInfo['ref_type'] = $upper;
-                    $parseInfo['ref_expr'] = "";
-
-                case 'CROSS':
-                case 'USE':
-                case 'FORCE':
-                case 'IGNORE':
-                case 'INNER':
-                case 'OUTER':
-                    $parseInfo['token_count']++;
-                    continue 2;
-                    break;
-
-                case 'FOR':
-                    $parseInfo['token_count']++;
-                    $skip_next = true;
-                    continue 2;
-                    break;
-
-                case 'LEFT':
-                case 'RIGHT':
-                case 'STRAIGHT_JOIN':
-                    $parseInfo['next_join_type'] = $upper;
-                    break;
-
-                case ',':
-                    $parseInfo['next_join_type'] = 'CROSS';
-
-                case 'JOIN':
-                    if ($parseInfo['subquery']) {
-                        $parseInfo['sub_tree'] = $this->parse($this->removeParenthesisFromStart($parseInfo['subquery']));
-                        $parseInfo['expression'] = $parseInfo['subquery'];
-                    }
-
-                    $expr[] = $this->processFromExpression($parseInfo);
-                    $parseInfo = $this->initParseInfoForFrom($parseInfo);
-                    break;
-
-                default:
-                    if ($upper === "") {
-                        continue 2; # ends the switch statement!
-                    }
-
-                    if ($parseInfo['token_count'] === 0) {
-                        if ($parseInfo['table'] === "") {
-                            $parseInfo['table'] = $token;
+                    case 'AS':
+                        $parseInfo['alias'] = array('as' => true, 'name' => "", 'base_expr' => $token);
+                        $parseInfo['token_count']++;
+                        $n = 1;
+                        $str = "";
+                        while ($str == "") {
+                            $parseInfo['alias']['base_expr'] .= ($tokens[$i + $n] === "" ? " " : $tokens[$i + $n]);
+                            $str = trim($tokens[$i + $n]);
+                            ++$n;
                         }
-                    } else if ($parseInfo['token_count'] === 1) {
-                        $parseInfo['alias'] = array('as' => false, 'name' => trim($token), 'base_expr' => trim($token));
-                    }
-                    $parseInfo['token_count']++;
-                    break;
+                        $parseInfo['alias']['name'] = $str;
+                        $parseInfo['alias']['base_expr'] = trim($parseInfo['alias']['base_expr']);
+                        continue 2;
+
+                    case 'INDEX':
+                        if ($token_category == 'CREATE') {
+                            $token_category = $upper;
+                            continue 2;
+                        }
+
+                        break;
+
+                    case 'USING':
+                    case 'ON':
+                        $parseInfo['ref_type'] = $upper;
+                        $parseInfo['ref_expr'] = "";
+
+                    case 'CROSS':
+                    case 'USE':
+                    case 'FORCE':
+                    case 'IGNORE':
+                    case 'INNER':
+                    case 'OUTER':
+                        $parseInfo['token_count']++;
+                        continue 2;
+                        break;
+
+                    case 'FOR':
+                        $parseInfo['token_count']++;
+                        $skip_next = true;
+                        continue 2;
+                        break;
+
+                    case 'LEFT':
+                    case 'RIGHT':
+                    case 'STRAIGHT_JOIN':
+                        $parseInfo['next_join_type'] = $upper;
+                        break;
+
+                    case ',':
+                        $parseInfo['next_join_type'] = 'CROSS';
+
+                    case 'JOIN':
+                        if ($parseInfo['subquery']) {
+                            $parseInfo['sub_tree'] = $this->parse(
+                                $this->removeParenthesisFromStart($parseInfo['subquery'])
+                            );
+                            $parseInfo['expression'] = $parseInfo['subquery'];
+                        }
+
+                        $expr[] = $this->processFromExpression($parseInfo);
+                        $parseInfo = $this->initParseInfoForFrom($parseInfo);
+                        break;
+
+                    default:
+                        if ($upper === "") {
+                            continue 2; # ends the switch statement!
+                        }
+
+                        if ($parseInfo['token_count'] === 0) {
+                            if ($parseInfo['table'] === "") {
+                                $parseInfo['table'] = $token;
+                            }
+                        } else {
+                            if ($parseInfo['token_count'] === 1) {
+                                $parseInfo['alias'] = array(
+                                    'as' => false,
+                                    'name' => trim($token),
+                                    'base_expr' => trim($token)
+                                );
+                            }
+                        }
+                        $parseInfo['token_count']++;
+                        break;
                 }
                 ++$i;
             }
@@ -1246,20 +1837,31 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $expr;
         }
 
-        private function initParseInfoForFrom($parseInfo = false) {
+        private function initParseInfoForFrom(bool $parseInfo = false): array
+        {
             # first init
             if ($parseInfo === false) {
                 $parseInfo = array('join_type' => "", 'saved_join_type' => "JOIN");
             }
             # loop init
-            return array('expression' => "", 'token_count' => 0, 'table' => "", 'alias' => false, 'join_type' => "",
-                         'next_join_type' => "", 'saved_join_type' => $parseInfo['saved_join_type'],
-                         'ref_type' => false, 'ref_expr' => false, 'base_expr' => false, 'sub_tree' => false,
-                         'subquery' => "");
+            return array(
+                'expression' => "",
+                'token_count' => 0,
+                'table' => "",
+                'alias' => false,
+                'join_type' => "",
+                'next_join_type' => "",
+                'saved_join_type' => $parseInfo['saved_join_type'],
+                'ref_type' => false,
+                'ref_expr' => false,
+                'base_expr' => false,
+                'sub_tree' => false,
+                'subquery' => ""
+            );
         }
 
-        private function processFromExpression(&$parseInfo) {
-
+        private function processFromExpression(array &$parseInfo): array
+        {
             $res = array();
 
             # exchange the join types (join_type is save now, saved_join_type holds the next one)
@@ -1305,7 +1907,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $res;
         }
 
-        private function processOrderExpression(&$parseInfo, $select) {
+        private function processOrderExpression(array &$parseInfo, array $select): false|array
+        {
             $parseInfo['expr'] = trim($parseInfo['expr']);
 
             if ($parseInfo['expr'] === "") {
@@ -1332,15 +1935,20 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                 }
             }
 
-            return array('type' => $parseInfo['type'], 'base_expr' => $parseInfo['expr'],
-                         'direction' => $parseInfo['dir']);
+            return array(
+                'type' => $parseInfo['type'],
+                'base_expr' => $parseInfo['expr'],
+                'direction' => $parseInfo['dir']
+            );
         }
 
-        private function initParseInfoForOrder() {
+        private function initParseInfoForOrder(): array
+        {
             return array('expr' => "", 'dir' => "ASC", 'type' => 'expression');
         }
 
-        private function process_order($tokens, $select) {
+        private function process_order($tokens, $select): false|array
+        {
             $out = array();
             $parseInfo = $this->initParseInfoForOrder();
 
@@ -1351,22 +1959,21 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             foreach ($tokens as $token) {
                 $upper = strtoupper(trim($token));
                 switch ($upper) {
-                case ',':
-                    $out[] = $this->processOrderExpression($parseInfo, $select);
-                    $parseInfo = $this->initParseInfoForOrder();
-                    break;
+                    case ',':
+                        $out[] = $this->processOrderExpression($parseInfo, $select);
+                        $parseInfo = $this->initParseInfoForOrder();
+                        break;
 
-                case 'DESC':
-                    $parseInfo['dir'] = "DESC";
-                    break;
+                    case 'DESC':
+                        $parseInfo['dir'] = "DESC";
+                        break;
 
-                case 'ASC':
-                    $parseInfo['dir'] = "ASC";
-                    break;
+                    case 'ASC':
+                        $parseInfo['dir'] = "ASC";
+                        break;
 
-                default:
-                    $parseInfo['expr'] .= $token;
-
+                    default:
+                        $parseInfo['expr'] .= $token;
                 }
             }
 
@@ -1374,7 +1981,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $out;
         }
 
-        private function process_group(&$tokens, &$select) {
+        private function process_group(array &$tokens, array &$select): false|array
+        {
             $out = array();
             $parseInfo = $this->initParseInfoForOrder();
 
@@ -1385,16 +1993,15 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             foreach ($tokens as $token) {
                 $trim = strtoupper(trim($token));
                 switch ($trim) {
-                case ',':
-                    $parsed = $this->processOrderExpression($parseInfo, $select);
-                    unset($parsed['direction']);
+                    case ',':
+                        $parsed = $this->processOrderExpression($parseInfo, $select);
+                        unset($parsed['direction']);
 
-                    $out[] = $parsed;
-                    $parseInfo = $this->initParseInfoForOrder();
-                    break;
-                default:
-                    $parseInfo['expr'] .= $token;
-
+                        $out[] = $parsed;
+                        $parseInfo = $this->initParseInfoForOrder();
+                        break;
+                    default:
+                        $parseInfo['expr'] .= $token;
                 }
             }
 
@@ -1405,8 +2012,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $out;
         }
 
-        private function removeParenthesisFromStart($token) {
-
+        private function removeParenthesisFromStart(string $token): string
+        {
             $parenthesisRemoved = 0;
 
             $trim = trim($token);
@@ -1420,7 +2027,6 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             $i = 0;
             $string = 0;
             while ($i < strlen($trim)) {
-
                 if ($trim[$i] === "\\") {
                     $i += 2; # an escape character, the next character is irrelevant
                     continue;
@@ -1446,31 +2052,51 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return trim($trim);
         }
 
-        private function initParseInfoExprList($parseInfo = false) {
+        private function initParseInfoExprList(array|false $parseInfo = false): array
+        {
             if ($parseInfo === false) {
-                return array('processed' => false, 'expr' => [], 'key' => false, 'token' => false, 'tokenType' => "",
-                             'prevToken' => "", 'prevTokenType' => "", 'trim' => false, 'upper' => false);
+                return array(
+                    'processed' => false,
+                    'expr' => [],
+                    'key' => false,
+                    'token' => false,
+                    'tokenType' => "",
+                    'prevToken' => "",
+                    'prevTokenType' => "",
+                    'trim' => false,
+                    'upper' => false
+                );
             }
 
             $expr = $parseInfo['expr'];
-            $expr[] = array('expr_type' => $parseInfo['tokenType'], 'base_expr' => $parseInfo['token'],
-                            'sub_tree' => $parseInfo['processed']);
+            $expr[] = array(
+                'expr_type' => $parseInfo['tokenType'],
+                'base_expr' => $parseInfo['token'],
+                'sub_tree' => $parseInfo['processed']
+            );
 
-            return array('processed' => false, 'expr' => $expr, 'key' => false, 'token' => false, 'tokenType' => "",
-                         'prevToken' => $parseInfo['upper'], 'prevTokenType' => $parseInfo['tokenType'],
-                         'trim' => false, 'upper' => false);
+            return array(
+                'processed' => false,
+                'expr' => $expr,
+                'key' => false,
+                'token' => false,
+                'tokenType' => "",
+                'prevToken' => $parseInfo['upper'],
+                'prevTokenType' => $parseInfo['tokenType'],
+                'trim' => false,
+                'upper' => false
+            );
         }
 
         /* Some sections are just lists of expressions, like the WHERE and HAVING clauses.  This function
          processes these sections.  Recursive.
          */
-        private function process_expr_list($tokens) {
-
+        private function process_expr_list(array $tokens): false|array
+        {
             $parseInfo = $this->initParseInfoExprList();
             $skip_next = false;
 
             foreach ($tokens as $parseInfo['key'] => $parseInfo['token']) {
-
                 $parseInfo['trim'] = trim($parseInfo['token']);
 
                 if ($parseInfo['trim'] === "") {
@@ -1491,14 +2117,12 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                     #we remove the enclosing parenthesis for the tokenizer
                     $parseInfo['processed'] = $this->parse($this->removeParenthesisFromStart($parseInfo['trim']));
                     $parseInfo['tokenType'] = 'subquery';
-
                 } elseif ($parseInfo['upper'][0] === '(' && substr($parseInfo['upper'], -1) === ')') {
                     /* is it an inlist (upper is derived from trim!) */
 
                     # if we have a colref followed by a parenthesis pair,
                     # it isn't a colref, it is a user-function
                     if (in_array($parseInfo['prevTokenType'], array('colref', 'function', 'aggregate_function'))) {
-
                         $tmptokens = $this->split_sql($this->removeParenthesisFromStart($parseInfo['trim']));
                         foreach ($tmptokens as $k => $v) {
                             if (trim($v) == ',') {
@@ -1512,12 +2136,11 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                         $last = array_pop($parseInfo['expr']);
                         $parseInfo['token'] = $last['base_expr'];
                         $parseInfo['tokenType'] = ($parseInfo['prevTokenType'] === 'colref' ? 'function'
-                                : $parseInfo['prevTokenType']);
+                            : $parseInfo['prevTokenType']);
                         $parseInfo['prevTokenType'] = $parseInfo['prevToken'] = "";
                     }
 
                     if ($parseInfo['prevToken'] == 'IN') {
-
                         $tmptokens = $this->split_sql($this->removeParenthesisFromStart($parseInfo['trim']));
                         foreach ($tmptokens as $k => $v) {
                             if (trim($v) == ',') {
@@ -1532,7 +2155,6 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                     }
 
                     if ($parseInfo['prevToken'] == 'AGAINST') {
-
                         $tmptokens = $this->split_sql($this->removeParenthesisFromStart($parseInfo['trim']));
                         if (count($tmptokens) > 1) {
                             $match_mode = implode('', array_slice($tmptokens, 1));
@@ -1544,149 +2166,145 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                         $parseInfo['prevTokenType'] = $parseInfo['prevToken'] = "";
                         $parseInfo['tokenType'] = "match-arguments";
                     }
-
                 } else {
                     /* it is either an operator, a colref or a constant */
                     switch ($parseInfo['upper']) {
+                        case '*':
+                            $parseInfo['processed'] = false; #no subtree
 
-                    case '*':
-                        $parseInfo['processed'] = false; #no subtree
+                            # last token is colref, const or expression
+                            # it is an operator, in all other cases it is an all-columns-alias
+                            # if the previous colref ends with a dot, the * is the all-columns-alias
+                            if (!$parseInfo['expr'] || !is_array($parseInfo['expr'])) {
+                                $parseInfo['tokenType'] = "colref"; # single or first element of select -> *
+                                break;
+                            }
 
-                        # last token is colref, const or expression
-                        # it is an operator, in all other cases it is an all-columns-alias
-                        # if the previous colref ends with a dot, the * is the all-columns-alias
-                        if (!$parseInfo['expr'] || !is_array($parseInfo['expr'])) {
-                            $parseInfo['tokenType'] = "colref"; # single or first element of select -> *
-                            break;
-                        }
+                            $last = array_pop($parseInfo['expr']);
+                            if (!in_array($last['expr_type'], array('colref', 'const', 'expression'))) {
+                                $parseInfo['expr'][] = $last;
+                                $parseInfo['tokenType'] = "colref";
+                                break;
+                            }
 
-                        $last = array_pop($parseInfo['expr']);
-                        if (!in_array($last['expr_type'], array('colref', 'const', 'expression'))) {
+                            if ($last['expr_type'] === 'colref' && substr($last['base_expr'], -1, 1) === ".") {
+                                $last['base_expr'] .= '*'; # tablealias dot *
+                                $parseInfo['expr'][] = $last;
+                                continue 2;
+                            }
+
                             $parseInfo['expr'][] = $last;
-                            $parseInfo['tokenType'] = "colref";
-                            break;
-                        }
-
-                        if ($last['expr_type'] === 'colref' && substr($last['base_expr'], -1, 1) === ".") {
-                            $last['base_expr'] .= '*'; # tablealias dot *
-                            $parseInfo['expr'][] = $last;
-                            continue 2;
-                        }
-
-                        $parseInfo['expr'][] = $last;
-                        $parseInfo['tokenType'] = "operator";
-                        break;
-
-                    case 'AND':
-                    case '&&':
-                    case 'BETWEEN':
-                    case 'AND':
-                    case 'BINARY':
-                    case '&':
-                    case '~':
-                    case '|':
-                    case '^':
-                    case 'DIV':
-                    case '/':
-                    case '<=>':
-                    case '=':
-                    case '>=':
-                    case '>':
-                    case 'IS':
-                    case 'NOT':
-                    case 'NULL':
-                    case '<<':
-                    case '<=':
-                    case '<':
-                    case 'LIKE':
-                    case '%':
-                    case '!=':
-                    case '<>':
-                    case 'REGEXP':
-                    case '!':
-                    case '||':
-                    case 'OR':
-                    case '>>':
-                    case 'RLIKE':
-                    case 'SOUNDS':
-                    case 'XOR':
-                    case 'IN':
-                        $parseInfo['processed'] = false;
-                        $parseInfo['tokenType'] = "operator";
-                        break;
-
-                    case '-':
-                    case '+':
-                    // differ between preceding sign and operator
-                        $parseInfo['processed'] = false;
-
-                        if (in_array($parseInfo['prevTokenType'],
-                                array('colref', 'function', 'aggregate_function', 'const', 'subquery'))) {
                             $parseInfo['tokenType'] = "operator";
-                        } else {
-                            $parseInfo['tokenType'] = "sign";
-                        }
-                        break;
-
-                    default:
-                        switch ($parseInfo['token'][0]) {
-                        case "'":
-                        case '"':
-                            $parseInfo['tokenType'] = 'const';
-                            break;
-                        case '`':
-                            $parseInfo['tokenType'] = 'colref';
                             break;
 
-                        default:
-                            if (is_numeric($parseInfo['token'])) {
-                                $parseInfo['tokenType'] = 'const';
+                        case 'AND':
+                        case '&&':
+                        case 'BETWEEN':
+                        case 'AND':
+                        case 'BINARY':
+                        case '&':
+                        case '~':
+                        case '|':
+                        case '^':
+                        case 'DIV':
+                        case '/':
+                        case '<=>':
+                        case '=':
+                        case '>=':
+                        case '>':
+                        case 'IS':
+                        case 'NOT':
+                        case 'NULL':
+                        case '<<':
+                        case '<=':
+                        case '<':
+                        case 'LIKE':
+                        case '%':
+                        case '!=':
+                        case '<>':
+                        case 'REGEXP':
+                        case '!':
+                        case '||':
+                        case 'OR':
+                        case '>>':
+                        case 'RLIKE':
+                        case 'SOUNDS':
+                        case 'XOR':
+                        case 'IN':
+                            $parseInfo['processed'] = false;
+                            $parseInfo['tokenType'] = "operator";
+                            break;
 
-                                if ($parseInfo['prevTokenType'] === 'sign') {
-                                    array_pop($parseInfo['expr']);
-                                    $parseInfo['token'] = $parseInfo['prevToken'] . $parseInfo['token'];
-                                }
+                        case '-':
+                        case '+':
+                            // differ between preceding sign and operator
+                            $parseInfo['processed'] = false;
 
+                            if (in_array(
+                                $parseInfo['prevTokenType'],
+                                array('colref', 'function', 'aggregate_function', 'const', 'subquery')
+                            )) {
+                                $parseInfo['tokenType'] = "operator";
                             } else {
-                                $parseInfo['tokenType'] = 'colref';
+                                $parseInfo['tokenType'] = "sign";
                             }
                             break;
 
-                        }
-                        $parseInfo['processed'] = false;
+                        default:
+                            switch ($parseInfo['token'][0]) {
+                                case "'":
+                                case '"':
+                                    $parseInfo['tokenType'] = 'const';
+                                    break;
+                                case '`':
+                                    $parseInfo['tokenType'] = 'colref';
+                                    break;
+
+                                default:
+                                    if (is_numeric($parseInfo['token'])) {
+                                        $parseInfo['tokenType'] = 'const';
+
+                                        if ($parseInfo['prevTokenType'] === 'sign') {
+                                            array_pop($parseInfo['expr']);
+                                            $parseInfo['token'] = $parseInfo['prevToken'] . $parseInfo['token'];
+                                        }
+                                    } else {
+                                        $parseInfo['tokenType'] = 'colref';
+                                    }
+                                    break;
+                            }
+                            $parseInfo['processed'] = false;
                     }
                 }
 
                 /* is a reserved word? */
                 if (!in_array($parseInfo['tokenType'], array('operator', 'in-list', 'function', 'aggregate_function'))
-                        && in_array($parseInfo['upper'], $this->reserved)) {
-
+                    && in_array($parseInfo['upper'], $this->reserved)) {
                     if (!in_array($parseInfo['upper'], $this->functions)) {
                         $parseInfo['tokenType'] = 'reserved';
-
                     } else {
                         switch ($parseInfo['upper']) {
-                        case 'AVG':
-                        case 'SUM':
-                        case 'COUNT':
-                        case 'MIN':
-                        case 'MAX':
-                        case 'STDDEV':
-                        case 'STDDEV_SAMP':
-                        case 'STDDEV_POP':
-                        case 'VARIANCE':
-                        case 'VAR_SAMP':
-                        case 'VAR_POP':
-                        case 'GROUP_CONCAT':
-                        case 'BIT_AND':
-                        case 'BIT_OR':
-                        case 'BIT_XOR':
-                            $parseInfo['tokenType'] = 'aggregate_function';
-                            break;
+                            case 'AVG':
+                            case 'SUM':
+                            case 'COUNT':
+                            case 'MIN':
+                            case 'MAX':
+                            case 'STDDEV':
+                            case 'STDDEV_SAMP':
+                            case 'STDDEV_POP':
+                            case 'VARIANCE':
+                            case 'VAR_SAMP':
+                            case 'VAR_POP':
+                            case 'GROUP_CONCAT':
+                            case 'BIT_AND':
+                            case 'BIT_OR':
+                            case 'BIT_XOR':
+                                $parseInfo['tokenType'] = 'aggregate_function';
+                                break;
 
-                        default:
-                            $parseInfo['tokenType'] = 'function';
-                            break;
+                            default:
+                                $parseInfo['tokenType'] = 'function';
+                                break;
                         }
                     }
                 }
@@ -1705,7 +2323,6 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                         $parseInfo['base_expr'] = $parseInfo['processed'][0]['base_expr'];
                         $parseInfo['processed'] = $parseInfo['processed'][0]['sub_tree'];
                     }
-
                 }
 
                 $parseInfo = $this->initParseInfoExprList($parseInfo);
@@ -1714,11 +2331,12 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return (is_array($parseInfo['expr']) ? $parseInfo['expr'] : false);
         }
 
-        private function process_update($tokens) {
-
+        private function process_update($tokens)
+        {
         }
 
-        private function process_delete($tokens) {
+        private function process_delete($tokens)
+        {
             $tables = array();
             $del = $tokens['DELETE'];
 
@@ -1738,14 +2356,16 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $tokens;
         }
 
-        private function process_insert($tokens, $token_category = 'INSERT') {
+        private function process_insert($tokens, $token_category = 'INSERT')
+        {
             $table = "";
             $cols = array();
 
             $into = $tokens['INTO'];
             foreach ($into as $token) {
-                if (trim($token) === "")
+                if (trim($token) === "") {
                     continue;
+                }
                 if ($table === "") {
                     $table = $token;
                 } elseif (empty($cols)) {
@@ -1768,8 +2388,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $tokens;
         }
 
-        private function process_record($unparsed) {
-
+        private function process_record($unparsed): false|array
+        {
             $unparsed = $this->removeParenthesisFromStart($unparsed);
             $values = $this->split_sql($unparsed);
 
@@ -1781,8 +2401,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $this->process_expr_list($values);
         }
 
-        private function process_values($tokens) {
-
+        private function process_values($tokens)
+        {
             $unparsed = "";
             foreach ($tokens['VALUES'] as $k => $v) {
                 if (trim($v) === "") {
@@ -1798,7 +2418,11 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                 if (trim($v) === ",") {
                     unset($values[$k]);
                 } else {
-                    $values[$k] = array('expr_type' => 'record', 'base_expr' => $v, 'data' => $this->process_record($v));
+                    $values[$k] = array(
+                        'expr_type' => 'record',
+                        'base_expr' => $v,
+                        'data' => $this->process_record($v)
+                    );
                 }
             }
 
@@ -1813,7 +2437,8 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
          * @param array $tokens
          * @return array
          */
-        private function process_into($tokens) {
+        private function process_into($tokens)
+        {
             $unparsed = $tokens['INTO'];
             foreach ($unparsed as $k => $token) {
                 if ((trim($token) === "") || (trim($token) === ",")) {
@@ -1833,26 +2458,31 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
      * @author arothe
      *
      */
-    class PositionCalculator extends PHPSQLParserUtils {
+    class PositionCalculator extends PHPSQLParserUtils
+    {
 
         private $allowedOnOperator;
         private $allowedOnOther;
 
-        public function __construct() {
+        public function __construct()
+        {
             $this->allowedOnOperator = $this->getAllowedOnOperator();
             $this->allowedOnOther = $this->getAllowedOnOther();
             parent::__construct();
         }
 
-        private function getAllowedOnOperator() {
+        private function getAllowedOnOperator()
+        {
             return array("\t", "\n", "\r", " ", ",", "(", ")", "_", "'");
         }
 
-        private function getAllowedOnOther() {
+        private function getAllowedOnOther()
+        {
             return array("\t", "\n", "\r", " ", ",", "(", ")", "<", ">", "*", "+", "-", "/", "|", "&", "=", "!", ";");
         }
 
-        private function printPos($text, $sql, $charPos, $key, $parsed, $backtracking) {
+        private function printPos($text, $sql, $charPos, $key, $parsed, $backtracking)
+        {
             if (!isset($_ENV['DEBUG'])) {
                 return;
             }
@@ -1866,22 +2496,22 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             }
             $holdem = substr($sql, 0, $charPos) . "^" . substr($sql, $charPos);
             echo $spaces . $text . " key:" . $key . "  parsed:" . $parsed . " back:" . serialize($backtracking) . " "
-                    . $holdem . "\n";
+                 . $holdem . "\n";
         }
 
-        public function setPositionsWithinSQL($sql, $parsed) {
+        public function setPositionsWithinSQL($sql, $parsed)
+        {
             $charPos = 0;
             $backtracking = array();
             $this->lookForBaseExpression($sql, $charPos, $parsed, 0, $backtracking);
             return $parsed;
         }
 
-        private function findPositionWithinString($sql, $value, $expr_type) {
-
+        private function findPositionWithinString($sql, $value, $expr_type)
+        {
             $offset = 0;
             $ok = false;
             while (true) {
-
                 $pos = strpos($sql, $value, $offset);
                 if ($pos === false) {
                     break;
@@ -1902,14 +2532,13 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                 # an operator should not be surrounded by another operator
 
                 if ($expr_type === 'operator') {
-
                     $ok = ($before === "" || in_array($before, $this->allowedOnOperator, true))
-                            || (strtolower($before) >= 'a' && strtolower($before) <= 'z')
-                            || ($before >= '0' && $before <= '9');
+                          || (strtolower($before) >= 'a' && strtolower($before) <= 'z')
+                          || ($before >= '0' && $before <= '9');
                     $ok = $ok
-                            && ($after === "" || in_array($after, $this->allowedOnOperator, true)
-                                    || (strtolower($after) >= 'a' && strtolower($after) <= 'z')
-                                    || ($after >= '0' && $after <= '9'));
+                          && ($after === "" || in_array($after, $this->allowedOnOperator, true)
+                              || (strtolower($after) >= 'a' && strtolower($after) <= 'z')
+                              || ($after >= '0' && $after <= '9'));
 
                     if (!$ok) {
                         $offset = $pos + 1;
@@ -1935,19 +2564,19 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             return $pos;
         }
 
-        private function lookForBaseExpression($sql, &$charPos, &$parsed, $key, &$backtracking) {
+        private function lookForBaseExpression($sql, &$charPos, &$parsed, $key, &$backtracking)
+        {
             if (!is_numeric($key)) {
                 if (in_array($key, array('UNION', 'UNION ALL'), true)
-                        || ($key === 'expr_type' && $parsed === 'expression')
-                        || ($key === 'expr_type' && $parsed === 'subquery')
-                        || ($key === 'expr_type' && $parsed === 'table_expression')
-                        || ($key === 'expr_type' && $parsed === 'record')
-                        || ($key === 'expr_type' && $parsed === 'in-list') || ($key === 'alias' && $parsed !== false)) {
+                    || ($key === 'expr_type' && $parsed === 'expression')
+                    || ($key === 'expr_type' && $parsed === 'subquery')
+                    || ($key === 'expr_type' && $parsed === 'table_expression')
+                    || ($key === 'expr_type' && $parsed === 'record')
+                    || ($key === 'expr_type' && $parsed === 'in-list') || ($key === 'alias' && $parsed !== false)) {
                     # we hold the current position and come back after the next base_expr
                     # we do this, because the next base_expr contains the complete expression/subquery/record
                     # and we have to look into it too
                     $backtracking[] = $charPos;
-
                 } elseif (($key === 'ref_clause' || $key === 'columns') && $parsed !== false) {
                     # we hold the current position and come back after n base_expr(s)
                     # there is an array of sub-elements before (!) the base_expr clause of the current element
@@ -1979,12 +2608,14 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
 
             foreach ($parsed as $key => $value) {
                 if ($key === 'base_expr') {
-
                     #$this->printPos("0", $sql, $charPos, $key, $value, $backtracking);
 
                     $subject = substr($sql, $charPos);
-                    $pos = $this->findPositionWithinString($subject, $value,
-                            isset($parsed['expr_type']) ? $parsed['expr_type'] : 'alias');
+                    $pos = $this->findPositionWithinString(
+                        $subject,
+                        $value,
+                        isset($parsed['expr_type']) ? $parsed['expr_type'] : 'alias'
+                    );
                     if ($pos === false) {
                         throw new UnableToCalculatePositionException($value, $subject);
                     }
@@ -1998,7 +2629,6 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
                     if (isset($oldPos) && $oldPos !== false) {
                         $charPos = $oldPos;
                     }
-
                     #$this->printPos("2", $sql, $charPos, $key, $value, $backtracking);
 
                 } else {
@@ -2008,40 +2638,46 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
         }
     }
 
-    class UnableToCalculatePositionException extends Exception {
+    class UnableToCalculatePositionException extends Exception
+    {
 
         protected $needle;
         protected $haystack;
 
-        public function __construct($needle, $haystack) {
+        public function __construct($needle, $haystack)
+        {
             $this->needle = $needle;
             $this->haystack = $haystack;
             parent::__construct("cannot calculate position of " . $needle . " within " . $haystack, 5);
         }
 
-        public function getNeedle() {
+        public function getNeedle()
+        {
             return $this->needle;
         }
 
-        public function getHaystack() {
+        public function getHaystack()
+        {
             return $this->haystack;
         }
     }
 
-    class InvalidParameterException extends InvalidArgumentException {
+    class InvalidParameterException extends InvalidArgumentException
+    {
 
         protected $argument;
 
-        public function __construct($argument) {
+        public function __construct($argument)
+        {
             $this->argument = $argument;
             parent::__construct("no SQL string to parse: \n" . $argument, 10);
         }
 
-        public function getArgument() {
+        public function getArgument()
+        {
             return $this->argument;
         }
     }
 
     define('HAVE_PHP_SQL_PARSER', 1);
 }
-
