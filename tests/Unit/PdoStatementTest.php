@@ -13,20 +13,20 @@ class PdoStatementTest extends TestCase
 {
     public function testFetchAllWithNoArguments()
     {
-        $rows = [
-            'id' => 1,
+        $rows                = [
+            'id'  => 1,
             'foo' => 'bar'
         ];
         $expectedFetchResult = [
             [
-                'id' => 1,
-                0 => 1,
+                'id'  => 1,
+                0     => 1,
                 'foo' => 'bar',
-                1 => 'bar'
+                1     => 'bar'
             ]
         ];
-        $r = new Result([$rows]);
-        $s = new PdoStatement();
+        $r                   = new Result([$rows]);
+        $s                   = new PdoStatement();
         $s->setResult($r);
         $fetchResult = $s->fetchAll();
         $this->assertEquals($expectedFetchResult, $fetchResult);
@@ -35,11 +35,11 @@ class PdoStatementTest extends TestCase
     public function testFetchAllWithFetchAssoc()
     {
         $rows = [
-            'id' => 1,
+            'id'  => 1,
             'foo' => 'bar'
         ];
-        $r = new Result([$rows]);
-        $s = new PdoStatement();
+        $r    = new Result([$rows]);
+        $s    = new PdoStatement();
         $s->setResult($r);
         $fetchResult = $s->fetchAll(Pdo::FETCH_ASSOC);
         $this->assertEquals([$rows], $fetchResult);
@@ -47,8 +47,8 @@ class PdoStatementTest extends TestCase
 
     public function testFetchAllWithFetchNum()
     {
-        $rows = [
-            'id' => 1,
+        $rows                = [
+            'id'  => 1,
             'foo' => 'bar'
         ];
         $expectedFetchResult = [
@@ -57,8 +57,8 @@ class PdoStatementTest extends TestCase
                 1 => 'bar'
             ]
         ];
-        $r = new Result([$rows]);
-        $s = new PdoStatement();
+        $r                   = new Result([$rows]);
+        $s                   = new PdoStatement();
         $s->setResult($r);
         $fetchResult = $s->fetchAll(Pdo::FETCH_NUM);
         $this->assertEquals($expectedFetchResult, $fetchResult);
@@ -66,18 +66,18 @@ class PdoStatementTest extends TestCase
 
     public function testFetchAllWithFetchObj()
     {
-        $rows = [
-            'id' => 1,
+        $rows                = [
+            'id'  => 1,
             'foo' => 'bar'
         ];
         $expectedFetchResult = [
             (object)[
-                'id' => 1,
+                'id'  => 1,
                 'foo' => 'bar'
             ]
         ];
-        $r = new Result([$rows]);
-        $s = new PdoStatement();
+        $r                   = new Result([$rows]);
+        $s                   = new PdoStatement();
         $s->setResult($r);
         $fetchResult = $s->fetchAll(Pdo::FETCH_OBJ);
         $this->assertEquals($expectedFetchResult, $fetchResult);
@@ -114,7 +114,7 @@ class PdoStatementTest extends TestCase
         $r = new Result();
         $r->addRow(
             [
-                'id' => 1,
+                'id'  => 1,
                 'foo' => 'bar'
             ]
         );
@@ -122,9 +122,16 @@ class PdoStatementTest extends TestCase
         $this->assertEquals(2, $p->columnCount());
     }
 
+    public function testColumnCountWhenZeo() : void
+    {
+        $statement = new PdoStatement();
+
+        $this->assertEquals(0, $statement->columnCount());
+    }
+
     public function testSetFetchMode()
     {
-        $p = new PdoStatement();
+        $p       = new PdoStatement();
         $success = $p->setFetchMode(Pdo::FETCH_ASSOC);
         $this->assertEquals(1, $success);
         $success = $p->setFetchMode(456);
@@ -134,11 +141,11 @@ class PdoStatementTest extends TestCase
     public function testFetch()
     {
         $row1 = [
-            'id' => 1,
+            'id'  => 1,
             'foo' => 'bar',
         ];
         $row2 = [
-            'id' => 2,
+            'id'  => 2,
             'foo' => 'baz'
         ];
 
@@ -160,13 +167,13 @@ class PdoStatementTest extends TestCase
     {
         $col1 = 1234;
         $row1 = [
-            'id' => $col1,
+            'id'  => $col1,
             'foo' => 'bar',
         ];
 
         $col2 = 5678;
         $row2 = [
-            'id' => $col2,
+            'id'  => $col2,
             'foo' => 'baz'
         ];
 
@@ -184,10 +191,10 @@ class PdoStatementTest extends TestCase
     public function testFetchWithBoundColumns()
     {
         $row1 = [
-            'id' => 1,
+            'id'  => 1,
             'foo' => 'bar',
         ];
-        $r = new Result();
+        $r    = new Result();
         $r->addRow($row1);
         $p = new PdoStatement($r);
         $p->bindColumn(2, $test);
@@ -205,21 +212,27 @@ class PdoStatementTest extends TestCase
 
     public function testFetchObject()
     {
-        $row1 = [
-            'id' => 1,
+        $row1       = [
+            'id'  => 1,
             'foo' => 'bar',
         ];
         $testObject = (object)$row1;
-        $r = new Result();
+        $r          = new Result();
         $r->addRow($row1);
         $s = new PdoStatement($r);
         $this->assertEquals($testObject, $s->fetchObject());
     }
 
+    public function testFailsToFetchObject(): void
+    {
+        $statement = new PdoStatement();
+        $this->assertFalse($statement->fetchObject());
+    }
+
     public function testExecute()
     {
-        $row1 = [
-            'id' => 1,
+        $row1    = [
+            'id'  => 1,
             'foo' => 'bar',
         ];
         $params1 = [
@@ -229,7 +242,7 @@ class PdoStatementTest extends TestCase
         $r = new Result();
         $r->addRow($row1, $params1);
         $queryLog = new QueryLog();
-        $s = new PdoStatement($r, $queryLog, 'SELECT * FROM test');
+        $s        = new PdoStatement($r, $queryLog, 'SELECT * FROM test');
 
         $this->assertEquals(true, $s->execute($params1));
         $this->assertEquals(false, $s->execute());
@@ -238,7 +251,7 @@ class PdoStatementTest extends TestCase
     public function testBindParam()
     {
         $param = 'foo';
-        $s = new PdoStatement();
+        $s     = new PdoStatement();
         $this->assertEquals(true, $s->bindParam(1, $param));
         $param = 'bar';
         $this->assertEquals([1 => 'bar'], $s->getBoundParams());
@@ -247,7 +260,7 @@ class PdoStatementTest extends TestCase
     public function testBindValue()
     {
         $param = 'foo';
-        $s = new PdoStatement();
+        $s     = new PdoStatement();
         $this->assertEquals(true, $s->bindValue(1, $param));
         $this->assertEquals([1 => 'foo'], $s->getBoundParams());
     }
@@ -255,7 +268,7 @@ class PdoStatementTest extends TestCase
     public function testFetchColumn()
     {
         $row1 = [
-            'id' => 1,
+            'id'  => 1,
             'foo' => 'bar',
         ];
 
@@ -267,22 +280,22 @@ class PdoStatementTest extends TestCase
         $this->assertEquals(false, $s->fetchColumn(0));
     }
 
-    public function testGetIterator(): void
+    public function testGetIterator() : void
     {
-        $rows = [
-            'id' => 1,
+        $rows                = [
+            'id'  => 1,
             'foo' => 'bar'
         ];
         $expectedFetchResult = [
             [
-                'id' => 1,
-                0 => 1,
+                'id'  => 1,
+                0     => 1,
                 'foo' => 'bar',
-                1 => 'bar'
+                1     => 'bar'
             ]
         ];
-        $r = new Result([$rows]);
-        $s = new PdoStatement();
+        $r                   = new Result([$rows]);
+        $s                   = new PdoStatement();
         $s->setResult($r);
         $fetchResult = $s->getIterator();
         $this->assertInstanceOf(Iterator::class, $fetchResult);

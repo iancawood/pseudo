@@ -5,6 +5,7 @@ namespace Pseudo;
 use ArrayIterator;
 use Iterator;
 use Pseudo\Exceptions\Exception;
+use ReflectionClass;
 
 class PdoStatement extends \PDOStatement
 {
@@ -174,13 +175,14 @@ class PdoStatement extends \PDOStatement
     {
         $row = $this->result->nextRow();
         if ($row) {
-            $reflect = new \ReflectionClass($class);
+            $reflect = new ReflectionClass($class);
             $obj = $reflect->newInstanceArgs($constructorArgs ?: []);
             foreach ($row as $key => $val) {
                 $obj->$key = $val;
             }
             return $obj;
         }
+
         return false;
     }
 
@@ -202,6 +204,7 @@ class PdoStatement extends \PDOStatement
 
     /**
      * @return int
+     * @throws Exception
      */
     public function columnCount(): int
     {
@@ -210,6 +213,7 @@ class PdoStatement extends \PDOStatement
             $row = array_shift($rows);
             return count(array_keys($row));
         }
+
         return 0;
     }
 
@@ -221,7 +225,7 @@ class PdoStatement extends \PDOStatement
      */
     public function setFetchMode($mode, $className = null, ...$params): bool|int
     {
-        $r = new \ReflectionClass(new Pdo());
+        $r = new ReflectionClass(new Pdo());
         $constants = $r->getConstants();
         $constantNames = array_keys($constants);
         $allowedConstantNames = array_filter($constantNames, function ($val) {
@@ -237,39 +241,6 @@ class PdoStatement extends \PDOStatement
             return 1;
         }
         return false;
-    }
-
-    public function nextRowset(): bool
-    {
-        throw new \RuntimeException('Not yet implemented');
-    }
-
-    public function closeCursor(): bool
-    {
-        throw new \RuntimeException('Not yet implemented');
-    }
-
-    public function debugDumpParams(): ?bool
-    {
-        throw new \RuntimeException('Not yet implemented');
-    }
-
-
-    // some functions make no sense when not actually talking to a database, so they are not implemented
-
-    public function setAttribute($attribute, $value): bool
-    {
-        throw new \RuntimeException('Not yet implemented');
-    }
-
-    public function getAttribute($name): mixed
-    {
-        throw new \RuntimeException('Not yet implemented');
-    }
-
-    public function getColumnMeta($column): false|array
-    {
-        throw new \RuntimeException('Not yet implemented');
     }
 
     public function getBoundParams(): array

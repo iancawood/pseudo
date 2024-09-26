@@ -1,17 +1,54 @@
 <?php
+
 namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
 use Pseudo\Exceptions\Exception;
 use Pseudo\Pdo;
+use Pseudo\PdoStatement;
 use Pseudo\Result;
 use Pseudo\ResultCollection;
 
-class PdoTest extends TestCase
+class PdoClassTest extends TestCase
 {
+    public function testPrepare()
+    {
+        $sql = "SELECT * FROM test WHERE foo='bar'";
+        $p   = new Pdo();
+        $p->mock($sql);
+        $statement = $p->prepare($sql);
+        $this->assertInstanceOf(PdoStatement::class, $statement);
+    }
+
+    public function testBeginTransaction() : void
+    {
+        $pdo     = new Pdo();
+        $success = $pdo->beginTransaction();
+        $this->assertTrue($success);
+    }
+
+    public function testTransactionStates()
+    {
+        $p = new Pdo();
+        $this->assertEquals($p->inTransaction(), false);
+
+        $this->assertEquals($p->beginTransaction(), true);
+        $this->assertEquals($p->inTransaction(), true);
+
+        $this->assertEquals($p->commit(), true);
+        $this->assertEquals($p->inTransaction(), false);
+        $this->assertEquals($p->rollBack(), false);
+
+        $p->beginTransaction();
+        $this->assertEquals($p->beginTransaction(), false);
+        $this->assertEquals($p->inTransaction(), true);
+        $this->assertEquals($p->rollBack(), true);
+        $this->assertEquals($p->commit(), false);
+    }
+
     public function testMock()
     {
-        $sql1 = "SELECT * FROM test WHERE foo='bar'";
+        $sql1    = "SELECT * FROM test WHERE foo='bar'";
         $result1 = [
             [
                 'id'  => 1,
@@ -24,10 +61,10 @@ class PdoTest extends TestCase
         $queries = $p->getMockedQueries();
         $this->assertTrue($queries->exists($sql1));
 
-        $sql2 = "SELECT * FROM test WHERE foo=:param1";
+        $sql2    = "SELECT * FROM test WHERE foo=:param1";
         $params2 = ["param1" => "bar"];
 
-        $sql3 = "SELECT * FROM test WHERE foo=?";
+        $sql3    = "SELECT * FROM test WHERE foo=?";
         $params3 = ['bar'];
 
         $params4 = ['baz'];
@@ -48,7 +85,7 @@ class PdoTest extends TestCase
 
     public function testQueryReturnsMockedResults()
     {
-        $p = new Pdo();
+        $p            = new Pdo();
         $expectedRows = new Result();
         $expectedRows->addRow(
             [
@@ -61,11 +98,19 @@ class PdoTest extends TestCase
         $this->assertEquals($expectedRows->getRows(), $result->fetchAll(PDO::FETCH_ASSOC));
     }
 
+    public function testMockQueryDoesNotExist() : void
+    {
+        $pdo = new Pdo();
+
+        $this->expectException(Exception::class);
+        $pdo->query('SELECT * FROM users');
+    }
+
     public function testLastInsertId()
     {
         $sql = "INSERT INTO foo VALUES ('1')";
-        $r = new Result();
-        $p = new Pdo();
+        $r   = new Result();
+        $p   = new Pdo();
         $p->mock($sql, $r);
         $p->query($sql);
         $this->assertEquals(0, $p->lastInsertId());
@@ -74,11 +119,18 @@ class PdoTest extends TestCase
         $this->assertEquals(1, $p->lastInsertId());
     }
 
+    public function testFailsToGetLastInsertId() : void
+    {
+        $pdo = new Pdo();
+
+        $this->assertFalse($pdo->lastInsertId());
+    }
+
     public function testLastInsertIdPreparedStatement()
     {
         $sql = "SELECT * FROM test WHERE foo='bar'";
-        $p = new Pdo();
-        $r = new Result();
+        $p   = new Pdo();
+        $r   = new Result();
         $r->setInsertId(10);
         $p->mock($sql, $r);
         $statement = $p->prepare($sql);
@@ -89,8 +141,8 @@ class PdoTest extends TestCase
     public function testErrorInfo()
     {
         $sql = "SELECT 1";
-        $r = new Result();
-        $p = new Pdo();
+        $r   = new Result();
+        $p   = new Pdo();
         $p->mock($sql, $r);
         $p->query($sql);
         $this->assertEquals(0, $p->lastInsertId());
@@ -102,8 +154,8 @@ class PdoTest extends TestCase
     public function testErrorCode()
     {
         $sql = "SELECT 1";
-        $r = new Result();
-        $p = new Pdo();
+        $r   = new Result();
+        $p   = new Pdo();
         $p->mock($sql, $r);
         $p->query($sql);
         $this->assertEquals(0, $p->lastInsertId());
@@ -112,43 +164,16 @@ class PdoTest extends TestCase
         $this->assertEquals(1, $p->lastInsertId());
     }
 
-    public function testTransactionStates()
-    {
-        $p = new Pdo();
-        $this->assertEquals($p->inTransaction(), false);
-
-        $this->assertEquals($p->beginTransaction(), true);
-        $this->assertEquals($p->inTransaction(), true);
-
-        $this->assertEquals($p->commit(), true);
-        $this->assertEquals($p->inTransaction(), false);
-
-        $p->beginTransaction();
-        $this->assertEquals($p->beginTransaction(), false);
-        $this->assertEquals($p->inTransaction(), true);
-        $this->assertEquals($p->rollBack(), true);
-        $this->assertEquals($p->commit(), false);
-    }
-
     public function testExec()
     {
         $sql = "SELECT 1";
-        $p = new Pdo();
-        $r = new Result();
+        $p   = new Pdo();
+        $r   = new Result();
         $p->mock($sql, $r);
         $results = $p->exec($sql);
         $this->assertEquals(0, $results);
         $r->setAffectedRowCount(5);
         $this->assertEquals(5, $p->exec($sql));
-    }
-
-    public function testPrepare()
-    {
-        $sql = "SELECT * FROM test WHERE foo='bar'";
-        $p = new Pdo();
-        $p->mock($sql);
-        $statement = $p->prepare($sql);
-        $this->assertInstanceOf("Pseudo\\PdoStatement", $statement);
     }
 
     public function testLoad()
@@ -184,7 +209,7 @@ class PdoTest extends TestCase
     public function testDebuggingRawQueries()
     {
         $message = null;
-        $p = new Pdo();
+        $p       = new Pdo();
         try {
             $p->prepare('SELECT 123');
         } catch (Exception $e) {

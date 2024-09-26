@@ -4,6 +4,7 @@ namespace Pseudo;
 
 use InvalidArgumentException;
 use Pseudo\Exceptions\Exception;
+use RuntimeException;
 
 class Pdo extends \PDO
 {
@@ -12,43 +13,37 @@ class Pdo extends \PDO
     private QueryLog $queryLog;
 
     /**
-     * @param ResultCollection|null $collection
+     * @param  ResultCollection|null  $collection
      */
     public function __construct(
         ResultCollection $collection = null
     ) {
         $this->mockedQueries = $collection ?? new ResultCollection();
-        $this->queryLog = new QueryLog();
+        $this->queryLog      = new QueryLog();
     }
 
     /**
      * @throws Exception
      */
-    public function prepare($query, $options = null): PdoStatement
+    public function prepare($query, $options = null) : PdoStatement
     {
         $result = $this->mockedQueries->getResult($query);
+
         return new PdoStatement($result, $this->queryLog, $query);
     }
 
-    public function beginTransaction(): bool
+    public function beginTransaction() : bool
     {
         if (!$this->inTransaction) {
             $this->inTransaction = true;
+
             return true;
         }
+
         return false;
     }
 
-    public function commit(): bool
-    {
-        if ($this->inTransaction()) {
-            $this->inTransaction = false;
-            return true;
-        }
-        return false;
-    }
-
-    public function rollBack(): bool
+    public function commit() : bool
     {
         if ($this->inTransaction()) {
             $this->inTransaction = false;
@@ -59,17 +54,23 @@ class Pdo extends \PDO
         return false;
     }
 
-    public function inTransaction(): bool
+    public function rollBack() : bool
+    {
+        if ($this->inTransaction()) {
+            $this->inTransaction = false;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function inTransaction() : bool
     {
         return $this->inTransaction;
     }
 
-    public function setAttribute($attribute, $value): bool
-    {
-        throw new \RuntimeException('Not yet implemented');
-    }
-
-    public function exec($statement): false|int
+    public function exec($statement) : false|int
     {
         $result = $this->query($statement);
 
@@ -77,13 +78,14 @@ class Pdo extends \PDO
     }
 
     /**
-     * @param string $query
-     * @param int|null $fetchMode
-     * @param mixed ...$fetchModeArgs
+     * @param  string  $query
+     * @param  int|null  $fetchMode
+     * @param  mixed  ...$fetchModeArgs
+     *
      * @return PdoStatement
      * @throws Exception
      */
-    public function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PdoStatement
+    public function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs) : PdoStatement
     {
         if ($this->mockedQueries->exists($query)) {
             $result = $this->mockedQueries->getResult($query);
@@ -99,11 +101,12 @@ class Pdo extends \PDO
     }
 
     /**
-     * @param null $name
+     * @param  null  $name
+     *
      * @return false|string
      * @throws Exception
      */
-    public function lastInsertId($name = null): false|string
+    public function lastInsertId($name = null) : false|string
     {
         $result = $this->getLastResult();
 
@@ -118,7 +121,7 @@ class Pdo extends \PDO
      * @return Result|false
      * @throws Exception
      */
-    private function getLastResult(): Result|false
+    private function getLastResult() : Result|false
     {
         try {
             $lastQuery = $this->queryLog[count($this->queryLog) - 1];
@@ -129,30 +132,10 @@ class Pdo extends \PDO
         return $this->mockedQueries->getResult($lastQuery);
     }
 
-    public function errorCode(): ?string
-    {
-        throw new \RuntimeException('Not yet implemented');
-    }
-
-    public function errorInfo(): array
-    {
-        throw new \RuntimeException('Not yet implemented');
-    }
-
-    public function getAttribute(int $attribute): mixed
-    {
-        throw new \RuntimeException('Not yet implemented');
-    }
-
-    public function quote($string, $type = PDO::PARAM_STR): false|string
-    {
-        throw new \RuntimeException('Not yet implemented');
-    }
-
     /**
-     * @param string $filePath
+     * @param  string  $filePath
      */
-    public function save(string $filePath): void
+    public function save(string $filePath) : void
     {
         file_put_contents($filePath, serialize($this->mockedQueries));
     }
@@ -160,17 +143,17 @@ class Pdo extends \PDO
     /**
      * @param $filePath
      */
-    public function load($filePath): void
+    public function load($filePath) : void
     {
         $this->mockedQueries = unserialize(file_get_contents($filePath));
     }
 
     /**
-     * @param string $sql
-     * @param null $expectedResults
-     * @param null $params
+     * @param  string  $sql
+     * @param  null  $expectedResults
+     * @param  null  $params
      */
-    public function mock(string $sql, $expectedResults = null, $params = null): void
+    public function mock(string $sql, $expectedResults = null, $params = null) : void
     {
         $this->mockedQueries->addQuery($sql, $params, $expectedResults);
     }
@@ -178,13 +161,8 @@ class Pdo extends \PDO
     /**
      * @return ResultCollection
      */
-    public function getMockedQueries(): ResultCollection
+    public function getMockedQueries() : ResultCollection
     {
         return $this->mockedQueries;
-    }
-
-    public function getIterator()
-    {
-
     }
 }
