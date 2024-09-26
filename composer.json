@@ -1,8 +1,12 @@
 {
-    "name": "jimbojsb/pseudo",
+    "name": "actuallyconnor/pseudo",
     "description": "PDO/MySQL Connection Mocking",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Connor Smyth",
+            "email": "connorsmyth@rogers.com"
+        },
         {
             "name": "Josh Butts",
             "email": "josh@joshbutts.com"
