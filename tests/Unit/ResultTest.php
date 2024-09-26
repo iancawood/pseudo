@@ -68,4 +68,13 @@ class ResultTest extends TestCase
         $r->reset();
         $this->assertEquals($row, $r->nextRow());
     }
+
+    public function testSetAffectedRowCount(): void
+    {
+        $query = "SELECT * FROM test";
+        $rows = [['id' => 1],['id' => 2],['id' => 3]];
+        $result = new Result($rows);
+        $result->setAffectedRowCount(count($rows));
+        $this->assertEquals(3, $result->getAffectedRowCount());
+    }
 }
