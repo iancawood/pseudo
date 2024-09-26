@@ -2,6 +2,8 @@
 
 namespace Pseudo;
 
+use Pseudo\Exceptions\Exception;
+
 class Result
 {
     private array $rows = [];

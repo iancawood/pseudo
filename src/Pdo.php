@@ -3,6 +3,7 @@
 namespace Pseudo;
 
 use InvalidArgumentException;
+use Pseudo\Exceptions\Exception;
 
 class Pdo extends \PDO
 {

@@ -4,7 +4,7 @@ namespace Pseudo;
 
 use ArrayIterator;
 use Iterator;
-use Pseudo\Pdo;
+use Pseudo\Exceptions\Exception;
 
 class PdoStatement extends \PDOStatement
 {

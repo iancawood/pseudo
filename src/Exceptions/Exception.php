@@ -1,5 +1,5 @@
 <?php
-namespace Pseudo;
+namespace Pseudo\Exceptions;
 
 class Exception extends \Exception
 {

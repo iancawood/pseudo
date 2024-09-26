@@ -3,7 +3,7 @@
 namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
-use Pseudo\Exception;
+use Pseudo\Exceptions\Exception;
 use Pseudo\ResultCollection;
 
 class ResultCollectionTest extends TestCase

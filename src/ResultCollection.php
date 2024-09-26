@@ -3,6 +3,7 @@
 namespace Pseudo;
 
 use Countable;
+use Pseudo\Exceptions\Exception;
 
 class ResultCollection implements Countable
 {
