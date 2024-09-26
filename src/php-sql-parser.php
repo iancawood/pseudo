@@ -2681,3 +2681,4 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
 
     define('HAVE_PHP_SQL_PARSER', 1);
 }
+

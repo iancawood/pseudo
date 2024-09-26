@@ -1,23 +1,27 @@
 {
   "name": "actuallyconnor/pseudo",
   "description": "PDO/MySQL Connection Mocking",
+  "type": "library",
   "license": "MIT",
   "authors": [
     {
       "name": "Connor Smyth",
-      "email": "connorsmyth@rogers.com"
+      "email": "connorsmyth@rogers.com",
+      "homepage": "https://connorsmyth.com",
+      "role": "Developer"
     },
     {
       "name": "Josh Butts",
-      "email": "josh@joshbutts.com"
+      "email": "josh@joshbutts.com",
+      "role": "Original Developer"
     }
   ],
   "require": {
-    "php": ">=8.0",
-    "ext-pdo": "*",
-    "ext-ctype": "*"
+    "php": ">=8.0"
   },
   "require-dev": {
+    "ext-pdo": "*",
+    "ext-ctype": "*",
     "phpunit/phpunit": "^11.3"
   },
   "autoload": {

@@ -34,6 +34,9 @@ class ResultCollection implements Countable
         return isset($this->queries[$query->getHash()]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function getResult(string|ParsedQuery $query): Result
     {
         if (!($query instanceof ParsedQuery)) {

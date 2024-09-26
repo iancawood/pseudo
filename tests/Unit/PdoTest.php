@@ -2,8 +2,8 @@
 namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
-use Pseudo\Exception;
 use Pseudo\Pdo;
+use Pseudo\Exception;
 use Pseudo\Result;
 use Pseudo\ResultCollection;
 
@@ -180,7 +180,7 @@ class PdoTest extends TestCase
         $this->assertEquals($r, $queries);
         unlink('testsave');
     }
-
+    
     public function testDebuggingRawQueries()
     {
         $message = null;

@@ -2,9 +2,14 @@
 
 namespace Pseudo;
 
+use ArrayAccess;
+use ArrayIterator;
+use Countable;
 use InvalidArgumentException;
+use IteratorAggregate;
+use Traversable;
 
-class QueryLog implements \IteratorAggregate, \ArrayAccess, \Countable
+class QueryLog implements IteratorAggregate, ArrayAccess, Countable
 {
     private $queries = [];
 
@@ -13,9 +18,9 @@ class QueryLog implements \IteratorAggregate, \ArrayAccess, \Countable
         return count($this->queries);
     }
 
-    public function getIterator(): \Traversable
+    public function getIterator(): Traversable
     {
-        return new \ArrayIterator($this->queries);
+        return new ArrayIterator($this->queries);
     }
 
     public function offsetExists($offset): bool

@@ -223,7 +223,7 @@ class PdoStatement extends \PDOStatement
         $constants = $r->getConstants();
         $constantNames = array_keys($constants);
         $allowedConstantNames = array_filter($constantNames, function ($val) {
-            return strpos($val, 'FETCH_') === 0;
+            return str_starts_with($val, 'FETCH_');
         });
         $allowedConstantVals = [];
         foreach ($allowedConstantNames as $name) {
@@ -239,17 +239,17 @@ class PdoStatement extends \PDOStatement
 
     public function nextRowset(): bool
     {
-        // not implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
     public function closeCursor(): bool
     {
-        // not implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
     public function debugDumpParams(): ?bool
     {
-        // not implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
 
@@ -257,17 +257,17 @@ class PdoStatement extends \PDOStatement
 
     public function setAttribute($attribute, $value): bool
     {
-        // not implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
     public function getAttribute($name): mixed
     {
-        // not implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
     public function getColumnMeta($column): false|array
     {
-        // not implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
     public function getBoundParams(): array

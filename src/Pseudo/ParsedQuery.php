@@ -5,7 +5,6 @@ use PHPSQLParser;
 
 class ParsedQuery
 {
-    private mixed $parsedQuery;
     private string $rawQuery;
     private string $hash;
 
@@ -15,10 +14,8 @@ class ParsedQuery
     public function __construct(string $query)
     {
         $parser = new PHPSQLParser();
-        $this->parsedQuery = $parser->parse($query);
         $this->rawQuery = $query;
         $this->hash = sha1($query);
-        $test = 0;
     }
 
     public function isEqualTo($query)

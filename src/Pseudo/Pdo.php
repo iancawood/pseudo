@@ -20,6 +20,9 @@ class Pdo extends \PDO
         $this->queryLog = new QueryLog();
     }
 
+    /**
+     * @throws Exception
+     */
     public function prepare($query, $options = null): PdoStatement
     {
         $result = $this->mockedQueries->getResult($query);
@@ -33,7 +36,6 @@ class Pdo extends \PDO
             return true;
         }
         return false;
-        // not yet implemented
     }
 
     public function commit(): bool
@@ -43,7 +45,6 @@ class Pdo extends \PDO
             return true;
         }
         return false;
-        // not yet implemented
     }
 
     public function rollBack(): bool
@@ -53,8 +54,8 @@ class Pdo extends \PDO
 
             return true;
         }
-        // not yet implemented
-        return true;
+
+        return false;
     }
 
     public function inTransaction(): bool
@@ -64,16 +65,14 @@ class Pdo extends \PDO
 
     public function setAttribute($attribute, $value): bool
     {
-        // not yet implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
     public function exec($statement): false|int
     {
         $result = $this->query($statement);
-        if ($result) {
-            return $result->rowCount();
-        }
-        return 0;
+
+        return $result->rowCount();
     }
 
     /**
@@ -81,23 +80,27 @@ class Pdo extends \PDO
      * @param int|null $fetchMode
      * @param mixed ...$fetchModeArgs
      * @return PdoStatement
+     * @throws Exception
      */
     public function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PdoStatement
     {
         if ($this->mockedQueries->exists($query)) {
             $result = $this->mockedQueries->getResult($query);
-            if ($result) {
-                $this->queryLog->addQuery($query);
-                $statement = new PdoStatement();
-                $statement->setResult($result);
-                return $statement;
-            }
+
+            $this->queryLog->addQuery($query);
+            $statement = new PdoStatement();
+            $statement->setResult($result);
+
+            return $statement;
         }
+
+        throw new Exception('Unable to convert query to PdoStatement');
     }
 
     /**
      * @param null $name
      * @return false|string
+     * @throws Exception
      */
     public function lastInsertId($name = null): false|string
     {
@@ -122,35 +125,33 @@ class Pdo extends \PDO
             return false;
         }
 
-        $result = $this->mockedQueries->getResult($lastQuery);
-
-        return $result;
+        return $this->mockedQueries->getResult($lastQuery);
     }
 
     public function errorCode(): ?string
     {
-        // not yet implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
     public function errorInfo(): array
     {
-        // not yet implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
     public function getAttribute($attribute)
     {
-        // not yet implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
     public function quote($string, $type = PDO::PARAM_STR): false|string
     {
-        // not yet implemented
+        throw new \RuntimeException('Not yet implemented');
     }
 
     /**
      * @param string $filePath
      */
-    public function save($filePath): void
+    public function save(string $filePath): void
     {
         file_put_contents($filePath, serialize($this->mockedQueries));
     }
@@ -164,16 +165,13 @@ class Pdo extends \PDO
     }
 
     /**
-     * @param $sql
+     * @param string $sql
      * @param null $expectedResults
      * @param null $params
      */
-    public function mock($sql, $expectedResults = null, $params = null): void
+    public function mock(string $sql, $expectedResults = null, $params = null): void
     {
-        $test = $this->mockedQueries->count();
         $this->mockedQueries->addQuery($sql, $params, $expectedResults);
-        $test = $this->mockedQueries->count();
-        $hell0 = 1;
     }
 
     /**
