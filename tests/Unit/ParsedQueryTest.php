@@ -4,6 +4,7 @@ namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
 use Pseudo\ParsedQuery;
+use Pseudo\Util\PHPSQLParser;
 
 class ParsedQueryTest extends TestCase
 {
@@ -11,7 +12,7 @@ class ParsedQueryTest extends TestCase
     {
         $sql = "SELECT foo FROM bar WHERE baz";
         $q = new ParsedQuery($sql);
-        $p = new \PHPSQLParser();
+        $p = new PHPSQLParser();
         $parsed = $p->parse($sql);
         $hashed = sha1($sql);
         $this->assertEquals($hashed, $q->getHash());

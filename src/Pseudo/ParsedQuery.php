@@ -1,7 +1,8 @@
 <?php
 namespace Pseudo;
 
-use PHPSQLParser;
+
+use Pseudo\Util\PHPSQLParser;
 
 class ParsedQuery
 {

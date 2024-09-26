@@ -27,10 +27,7 @@
   "autoload": {
     "psr-4": {
       "Pseudo\\": "src/Pseudo"
-    },
-    "files": [
-      "src/php-sql-parser.php"
-    ]
+    }
   },
   "autoload-dev": {
     "psr-4": {
