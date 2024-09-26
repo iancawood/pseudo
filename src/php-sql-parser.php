@@ -81,7 +81,7 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             }
             for ($j = 0; $j < count($needle); ++$j) {
                 $length = strlen($needle[$j]);
-                if (substr($haystack, 0, $length) === $needle[$j]) {
+                if (is_string($haystack) && substr($haystack, 0, $length) === $needle[$j]) {
                     return $j;
                 }
             }
@@ -2496,7 +2496,7 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
             }
             $holdem = substr($sql, 0, $charPos) . "^" . substr($sql, $charPos);
             echo $spaces . $text . " key:" . $key . "  parsed:" . $parsed . " back:" . serialize($backtracking) . " "
-                 . $holdem . "\n";
+                . $holdem . "\n";
         }
 
         public function setPositionsWithinSQL($sql, $parsed)
@@ -2533,12 +2533,12 @@ if (!defined('HAVE_PHP_SQL_PARSER')) {
 
                 if ($expr_type === 'operator') {
                     $ok = ($before === "" || in_array($before, $this->allowedOnOperator, true))
-                          || (strtolower($before) >= 'a' && strtolower($before) <= 'z')
-                          || ($before >= '0' && $before <= '9');
+                        || (strtolower($before) >= 'a' && strtolower($before) <= 'z')
+                        || ($before >= '0' && $before <= '9');
                     $ok = $ok
-                          && ($after === "" || in_array($after, $this->allowedOnOperator, true)
-                              || (strtolower($after) >= 'a' && strtolower($after) <= 'z')
-                              || ($after >= '0' && $after <= '9'));
+                        && ($after === "" || in_array($after, $this->allowedOnOperator, true)
+                            || (strtolower($after) >= 'a' && strtolower($after) <= 'z')
+                            || ($after >= '0' && $after <= '9'));
 
                     if (!$ok) {
                         $offset = $pos + 1;

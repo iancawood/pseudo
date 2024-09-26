@@ -31,7 +31,7 @@ class Result
             if ($this->isParameterized && !empty($row)) {
                 $this->rows[$this->stringifyParameterSet($params)][] = $row;
             } else {
-                if (!$this->isParameterized && !$this->rows) {
+                if (!$this->isParameterized && isset($this->rows) && !$this->rows) {
                     if (!empty($row)) {
                         $this->rows[$this->stringifyParameterSet($params)][] = $row;
                     }
@@ -70,7 +70,7 @@ class Result
             }
             throw new Exception("Cannot get rows with parameters on a non-parameterized result");
         } else {
-            if (!$this->isParameterized) {
+            if (!$this->isParameterized && isset($this->rows)) {
                 return $this->rows;
             }
             throw new Exception("Cannot get rows without parameters on a parameterized result");
@@ -98,6 +98,10 @@ class Result
      */
     public function nextRow(): false|array
     {
+        if (!isset($this->rows)) {
+            return false;
+        }
+
         if ($this->isParameterized) {
             $row = $this->getRowIfExists($this->rows[$this->stringifyParameterSet($this->params)]);
         } else {

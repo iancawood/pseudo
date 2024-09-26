@@ -2,9 +2,10 @@
 namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
-use Pseudo\Test\Exception;
-use Pseudo\Test\PDO;
-use Pseudo\Test\Pseudo;
+use Pseudo\Pdo;
+use Pseudo\Exception;
+use Pseudo\Result;
+use Pseudo\ResultCollection;
 
 class PdoTest extends TestCase
 {
@@ -18,7 +19,7 @@ class PdoTest extends TestCase
             ]
         ];
 
-        $p = new Pseudo\Pdo();
+        $p = new Pdo();
         $p->mock($sql1, $result1);
         $queries = $p->getMockedQueries();
         $this->assertTrue($queries->exists($sql1));
@@ -49,8 +50,8 @@ class PdoTest extends TestCase
 
     public function testQueryReturnsMockedResults()
     {
-        $p = new Pseudo\Pdo();
-        $expectedRows = new Pseudo\Result();
+        $p = new Pdo();
+        $expectedRows = new Result();
         $expectedRows->addRow(
             [
                 "foo" => "bar",
@@ -65,8 +66,8 @@ class PdoTest extends TestCase
     public function testLastInsertId()
     {
         $sql = "INSERT INTO foo VALUES ('1')";
-        $r = new Pseudo\Result();
-        $p = new Pseudo\Pdo();
+        $r = new Result();
+        $p = new Pdo();
         $p->mock($sql, $r);
         $p->query($sql);
         $this->assertEquals(0, $p->lastInsertId());
@@ -78,8 +79,8 @@ class PdoTest extends TestCase
     public function testLastInsertIdPreparedStatement()
     {
         $sql = "SELECT * FROM test WHERE foo='bar'";
-        $p = new Pseudo\Pdo();
-        $r = new Pseudo\Result();
+        $p = new Pdo();
+        $r = new Result();
         $r->setInsertId(10);
         $p->mock($sql, $r);
         $statement = $p->prepare($sql);
@@ -90,8 +91,8 @@ class PdoTest extends TestCase
     public function testErrorInfo()
     {
         $sql = "SELECT 1";
-        $r = new Pseudo\Result();
-        $p = new Pseudo\Pdo();
+        $r = new Result();
+        $p = new Pdo();
         $p->mock($sql, $r);
         $p->query($sql);
         $this->assertEquals(0, $p->lastInsertId());
@@ -103,8 +104,8 @@ class PdoTest extends TestCase
     public function testErrorCode()
     {
         $sql = "SELECT 1";
-        $r = new Pseudo\Result();
-        $p = new Pseudo\Pdo();
+        $r = new Result();
+        $p = new Pdo();
         $p->mock($sql, $r);
         $p->query($sql);
         $this->assertEquals(0, $p->lastInsertId());
@@ -115,7 +116,7 @@ class PdoTest extends TestCase
 
     public function testTransactionStates()
     {
-        $p = new Pseudo\Pdo();
+        $p = new Pdo();
         $this->assertEquals($p->inTransaction(), false);
 
         $this->assertEquals($p->beginTransaction(), true);
@@ -134,8 +135,8 @@ class PdoTest extends TestCase
     public function testExec()
     {
         $sql = "SELECT 1";
-        $p = new Pseudo\Pdo();
-        $r = new Pseudo\Result();
+        $p = new Pdo();
+        $r = new Result();
         $p->mock($sql, $r);
         $results = $p->exec($sql);
         $this->assertEquals(0, $results);
@@ -146,7 +147,7 @@ class PdoTest extends TestCase
     public function testPrepare()
     {
         $sql = "SELECT * FROM test WHERE foo='bar'";
-        $p = new Pseudo\Pdo();
+        $p = new Pdo();
         $p->mock($sql);
         $statement = $p->prepare($sql);
         $this->assertInstanceOf("Pseudo\\PdoStatement", $statement);
@@ -154,14 +155,14 @@ class PdoTest extends TestCase
 
     public function testLoad()
     {
-        $r = new Pseudo\ResultCollection();
+        $r = new ResultCollection();
         $r->addQuery("SELECT 1", [[1]]);
         $serialized = serialize($r);
         if (file_exists('testload')) {
             unlink('testload');
         }
         file_put_contents('testload', $serialized);
-        $p = new Pseudo\Pdo();
+        $p = new Pdo();
         $p->load('testload');
         $this->assertEquals($r, $p->getMockedQueries());
         unlink('testload');
@@ -169,13 +170,13 @@ class PdoTest extends TestCase
 
     public function testSave()
     {
-        $r = new Pseudo\ResultCollection();
+        $r = new ResultCollection();
         $r->addQuery("SELECT 1", [[1]]);
         $serialized = serialize($r);
         if (file_exists('testsave')) {
             unlink('testsave');
         }
-        $p = new Pseudo\Pdo($r);
+        $p = new Pdo($r);
         $p->save('testsave');
         $queries = unserialize(file_get_contents('testsave'));
         $this->assertEquals($r, $queries);
@@ -185,12 +186,12 @@ class PdoTest extends TestCase
     public function testDebuggingRawQueries()
     {
         $message = null;
-        $p = new Pseudo\Pdo();
+        $p = new Pdo();
         try {
             $p->prepare('SELECT 123');
         } catch (Exception $e) {
             $message = $e->getMessage();
         }
-        $this->assertRegExp('/SELECT 123/', $message);
+        $this->assertMatchesRegularExpression('/SELECT 123/', $message);
     }
 }

@@ -18,14 +18,8 @@ class Pdo extends \PDO
      * @param array|null $options
      */
     public function __construct(
-        ResultCollection $collection = null,
-        string $dsn = '',
-        ?string $username = null,
-        ?string $password = null,
-        array $options = null
+        ResultCollection $collection = null
     ) {
-        parent::__construct($dsn, $username, $password, $options);
-
         $this->mockedQueries = $collection ?: new ResultCollection();
         $this->queryLog = new QueryLog();
     }
@@ -112,19 +106,18 @@ class Pdo extends \PDO
     public function lastInsertId($name = null): false|string
     {
         $result = $this->getLastResult();
-        if ($result) {
-            return $result->getInsertId();
-        }
-        return 0;
+
+        return $result->getInsertId();
     }
 
     /**
-     * @return result
+     * @return Result
      */
-    private function getLastResult(): result
+    private function getLastResult(): Result
     {
         $lastQuery = $this->queryLog[count($this->queryLog) - 1];
         $result = $this->mockedQueries->getResult($lastQuery);
+
         return $result;
     }
 

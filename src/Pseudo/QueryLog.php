@@ -1,5 +1,8 @@
 <?php
+
 namespace Pseudo;
+
+use InvalidArgumentException;
 
 class QueryLog implements \IteratorAggregate, \ArrayAccess, \Countable
 {
@@ -22,6 +25,10 @@ class QueryLog implements \IteratorAggregate, \ArrayAccess, \Countable
 
     public function offsetGet($offset): mixed
     {
+        if (!$this->offsetExists($offset)) {
+            throw new InvalidArgumentException("Offset $offset does not exist");
+        }
+
         return $this->queries[$offset];
     }
 

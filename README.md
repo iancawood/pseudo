@@ -32,9 +32,6 @@ The internal storage of mocks and results are associatve arrays. Pseudo attempts
 ## Tests
 Pseudo has a fairly robust test suite written with PHPUnit. If you'd like to run the tests, simply run `./vendor/bin/phpunit` in the root folder. The tests have no external library dependencies (other than phpunit) and should require no additional setup or bootstrapping to run.
 
-Pseudo is also tested on Travis-CI
-[![Build Status](https://secure.travis-ci.org/jimbojsb/pseudo.png?branch=master)](http://travis-ci.org/jimbojsb/pseudo)
-
 ## Requirements
 Pseudo internals currently target PHP 5.4.0 and above. It has no external dependencies aside from the PDO extension, which seems rather obvious.
 

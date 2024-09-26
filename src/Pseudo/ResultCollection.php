@@ -34,7 +34,7 @@ class ResultCollection implements \Countable
         return isset($this->queries[$query->getHash()]);
     }
 
-    public function getResult($query): Result
+    public function getResult(string|ParsedQuery $query): Result
     {
         if (!($query instanceof ParsedQuery)) {
             $query = new ParsedQuery($query);
@@ -44,7 +44,7 @@ class ResultCollection implements \Countable
             return $result;
         } else {
             $message = "Attempting an operation on an un-mocked query is not allowed, the raw query: "
-                       . $query->getRawQuery();
+                . $query->getRawQuery();
             throw new Exception($message);
         }
     }
