@@ -40,13 +40,15 @@ class ResultCollection implements Countable
     /**
      * @throws PseudoException
      */
-    public function getResult(string|ParsedQuery $query): Result
+    public function getResult(string|ParsedQuery $query): Result|bool
     {
         if (!($query instanceof ParsedQuery)) {
             $query = new ParsedQuery($query);
         }
         $result = (isset($this->queries[$query->getHash()])) ? $this->queries[$query->getHash()] : null;
         if ($result instanceof Result) {
+            return $result;
+        } elseif (is_bool($result)) {
             return $result;
         } else {
             $message = "Attempting an operation on an un-mocked query is not allowed, the raw query: "
