@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.1
+
+### Changed
+
+- `README.md` updates
+
 ## 2.0.0
 
 ### Changed
