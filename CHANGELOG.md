@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.2
+
+### Changed
+
+- Updating ResultCollection::getResult() to be able to return bool
+
 ## 1.0.1
 
 ### Changed
