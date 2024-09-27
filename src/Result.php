@@ -20,36 +20,36 @@ class Result
         if (is_array($rows)) {
             if ($params) {
                 $this->rows[$this->stringifyParameterSet($params)] = $rows;
-                $this->isParameterized = true;
+                $this->isParameterized                             = true;
             } else {
                 $this->rows = $rows;
             }
         }
     }
 
-    public function addRow(array $row, $params = null): void
+    /**
+     * @throws Exception
+     */
+    public function addRow(array $row, $params = null) : void
     {
+        if (empty($row)) {
+            return;
+        }
+
         if ($params) {
-            if ($this->isParameterized && !empty($row)) {
-                $this->rows[$this->stringifyParameterSet($params)][] = $row;
+            $parameterKey = $this->stringifyParameterSet($params);
+
+            if ($this->isParameterized) {
+                $this->rows[$parameterKey][] = $row;
             } else {
-                if (!$this->isParameterized && isset($this->rows) && !$this->rows) {
-                    if (!empty($row)) {
-                        $this->rows[$this->stringifyParameterSet($params)][] = $row;
-                    }
-                    $this->isParameterized = true;
-                }
+                $this->initializeParameterizedRows($parameterKey, $row);
             }
         } else {
-            if (!$this->isParameterized && !empty($row)) {
-                $this->rows[] = $row;
-            } else {
-                throw new Exception("Cannot mix parameterized and non-parameterized rowsets");
-            }
+            $this->addNonParameterizedRow($row);
         }
     }
 
-    public function setParams($params, $parameterize = null): void
+    public function setParams($params, bool $parameterize = false) : void
     {
         $this->params = $params;
         if ($parameterize) {
@@ -83,14 +83,16 @@ class Result
     /**
      * Returns the next row if it exists, otherwise returns false
      *
-     * @param array $rows Rows to get row from
+     * @param  array  $rows  Rows to get row from
+     *
      * @return false|array Next row (false if doesn't exist)
      */
-    private function getRowIfExists(array $rows): false|array
+    private function getRowIfExists(array $rows) : false|array
     {
         if (!isset($rows[$this->rowOffset])) {
             return false;
         }
+
         return $rows[$this->rowOffset];
     }
 
@@ -99,9 +101,9 @@ class Result
      *
      * @return false|array
      */
-    public function nextRow(): false|array
+    public function nextRow() : false|array
     {
-        if (!isset($this->rows)) {
+        if (empty($this->rows)) {
             return false;
         }
 
@@ -119,21 +121,22 @@ class Result
     }
 
 
-    public function setInsertId($insertId): void
+    public function setInsertId($insertId) : void
     {
         $this->insertId = $insertId;
     }
 
-    public function getInsertId(): int
+    public function getInsertId() : int
     {
         return $this->insertId;
     }
 
     /**
      * @param $errorCode
+     *
      * @throws Exception
      */
-    public function setErrorCode($errorCode): void
+    public function setErrorCode($errorCode) : void
     {
         if (ctype_alnum($errorCode) && strlen($errorCode) == 5) {
             $this->errorCode = $errorCode;
@@ -145,7 +148,7 @@ class Result
     /**
      * @return string
      */
-    public function getErrorCode(): string
+    public function getErrorCode() : string
     {
         return $this->errorCode;
     }
@@ -153,7 +156,7 @@ class Result
     /**
      * @param $errorInfo
      */
-    public function setErrorInfo($errorInfo): void
+    public function setErrorInfo($errorInfo) : void
     {
         $this->errorInfo = $errorInfo;
     }
@@ -161,32 +164,32 @@ class Result
     /**
      * @return string
      */
-    public function getErrorInfo(): string
+    public function getErrorInfo() : string
     {
         return $this->errorInfo;
     }
 
-    public function setAffectedRowCount($affectedRowCount): void
+    public function setAffectedRowCount($affectedRowCount) : void
     {
         $this->affectedRowCount = $affectedRowCount;
     }
 
-    public function getAffectedRowCount(): int
+    public function getAffectedRowCount() : int
     {
         return $this->affectedRowCount;
     }
 
-    public function isOrdinalArray(array $arr): bool
+    public function isOrdinalArray(array $arr) : bool
     {
         return !(is_string(key($arr)));
     }
 
-    public function reset(): void
+    public function reset() : void
     {
         $this->rowOffset = 0;
     }
 
-    private function stringifyParameterSet(array $params): string
+    private function stringifyParameterSet(array $params) : string
     {
         if ($this->isOrdinalArray($params)) {
             return implode(',', $params);
@@ -196,7 +199,28 @@ class Result
                 $returnArray[] = $key;
                 $returnArray[] = $value;
             }
+
             return implode(',', $returnArray);
         }
+    }
+
+    private function initializeParameterizedRows(string $parameterKey, array $row) : void
+    {
+        if (empty($this->rows)) {
+            $this->rows[$parameterKey][] = $row;
+            $this->isParameterized       = true;
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function addNonParameterizedRow(array $row) : void
+    {
+        if ($this->isParameterized) {
+            throw new Exception("Cannot mix parameterized and non-parameterized rowsets");
+        }
+
+        $this->rows[] = $row;
     }
 }

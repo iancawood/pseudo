@@ -20,14 +20,14 @@ class ResultTest extends TestCase
     public function testNextRow()
     {
         $row1 = [
-            'id' => 1,
+            'id'  => 1,
             'foo' => 'bar',
         ];
         $row2 = [
             'id'  => 2,
             'foo' => 'baz'
         ];
-        $r = new Result();
+        $r    = new Result();
         $r->addRow($row1);
         $r->addRow($row2);
 
@@ -38,7 +38,7 @@ class ResultTest extends TestCase
 
     public function testAddRow()
     {
-        $row = [
+        $row    = [
             'id'  => 1,
             'foo' => 'bar'
         ];
@@ -48,11 +48,11 @@ class ResultTest extends TestCase
 
         $r = new Result;
         $r->addRow($row);
-        $this->assertEquals(1, count($r->getRows()));
+        $this->assertCount(1, $r->getRows());
 
         $r = new Result;
         $r->addRow($row, $params);
-        $this->assertEquals(1, count($r->getRows($params)));
+        $this->assertCount(1, $r->getRows($params));
     }
 
     public function testReset()
@@ -61,7 +61,7 @@ class ResultTest extends TestCase
             'id'  => 1,
             'foo' => 'bar'
         ];
-        $r = new Result();
+        $r   = new Result();
         $r->addRow($row);
         $this->assertEquals($row, $r->nextRow());
         $this->assertEquals(null, $r->nextRow());
@@ -69,12 +69,61 @@ class ResultTest extends TestCase
         $this->assertEquals($row, $r->nextRow());
     }
 
-    public function testSetAffectedRowCount(): void
+    public function testSetParametersParameterized() : void
     {
-        $query = "SELECT * FROM test";
-        $rows = [['id' => 1],['id' => 2],['id' => 3]];
+        $result = new Result();
+        $result->setParams(['param'], true);
+
+        $this->assertEquals([], $result->getRows());
+    }
+
+    public function testSetParametersNotParameterized() : void
+    {
+        $result = new Result();
+        $result->setParams(['param']);
+
+        $this->expectException(Exception::class);
+        $result->getRows();
+    }
+
+    public function testEmptyRowProvided() : void
+    {
+        $result = new Result();
+        $result->addRow([]);
+
+        $this->assertCount(0, $result->getRows());
+    }
+
+    public function testSetAffectedRowCount() : void
+    {
+        $query  = "SELECT * FROM test";
+        $rows   = [['id' => 1], ['id' => 2], ['id' => 3]];
         $result = new Result($rows);
         $result->setAffectedRowCount(count($rows));
         $this->assertEquals(3, $result->getAffectedRowCount());
+    }
+
+    public function testGetNextRowWhenRowsNotSet() : void
+    {
+        $result = new Result();
+        $this->assertFalse($result->nextRow());
+    }
+
+    public function testGetNexRowWhenParameterized() : void
+    {
+        $result = new Result();
+        $result->setParams(['param'], true);
+
+        $result->addRow([['id' => 1], ['id' => 2], ['id' => 3]], ['param']);
+        $result->addRow([['id' => 1], ['id' => 2], ['id' => 3]], ['param']);
+
+        $this->assertEquals(
+            [
+                ['id' => 1],
+                ['id' => 2],
+                ['id' => 3]
+            ],
+            $result->nextRow()
+        );
     }
 }
