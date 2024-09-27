@@ -1,7 +1,5 @@
 # Pseudo
 
-https://packagist.org/packages/actuallyconnor/pseudo
-
 Pseudo is a system for mocking PHP's PDO database connections. When writing unit tests for PHP applications, one
 frequently has the need to test code that interacts with a database. However, in the true spirit of a unit test, the
 database should be abstracted, as we can assume with some degree of certainty that things like network links to the
@@ -14,6 +12,9 @@ another format, ensuring the data schema availability, loading the fixtures in, 
 them between tests. Second, and somewhat as a result of the first, tests can run *significantly* faster because they are
 essentially talking to an in-memory object structure rather than incurring all the overhead of connecting and
 interacting with an actual database.
+
+Find the package on [packagist.org](https://packagist.org/packages/actuallyconnor/pseudo
+)
 
 ## Installation
 
@@ -31,16 +32,22 @@ arrays of result data.
 
 ### Simple Example
 
-	<?php
-	$p = new Pseudo\Pdo();
-	$results = [['id' => 1, 'foo' => 'bar']];
-	$p->mock("SELECT id FROM objects WHERE foo='bar'", $results);
+```php
+<?php
+$p = new Pseudo\Pdo();
+$p->mock(
+    "SELECT id FROM objects WHERE foo = :foo'", 
+    [['id' => 1, 'foo' => 'bar']],
+    ['bar' => 'bar']
+);
 
-	// now use this $p object like you would any regular PDO
-	$results = $p->query("SELECT id FROM objects WHERE foo='bar'");
-	while ($result = $results->fetch(PDO::FETCH_ASSOC)) {
-		echo $result["foo"];  // bar
-	}
+// now use this $p object like you would any regular PDO
+$results = $p->query("SELECT id FROM objects WHERE foo='bar'");
+
+foreach ($results->fetch(PDO::FETCH_ASSOC) as $result) {
+    echo $result["foo"];  // bar
+}
+```
 
 ### Supported features
 
@@ -73,3 +80,7 @@ which seems rather obvious.
 Pseudo is built and tested with error reporting set to ```E_ALL & ~(E_NOTICE | E_DEPRECATED | E_STRICT)```. If you are
 running in a stricter error reporting mode, your tests will most likely fail due to strict mode method signature
 violations. (This is on the known issues / to do list)
+
+## License
+
+The Pseudo is open-sourced software licensed under the MIT license.
