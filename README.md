@@ -21,8 +21,7 @@ can now inject a Pseudo\Pdo object transparently, giving yourself 100% flexibili
 *thinks* is the database. In your unit test, you can express the mocks for your test in terms of SQL statements and
 arrays of result data.
 
-Find the package on [packagist.org](https://packagist.org/packages/actuallyconnor/pseudo
-)
+Find the package on [packagist.org](https://packagist.org/packages/actuallyconnor/pseudo)
 
 ## Installation
 
@@ -32,20 +31,55 @@ composer require --dev actuallyconnor/pseudo
 
 ### Usage
 
+#### Something you may want to test
+
 ```php
 <?php
-$p = new Pseudo\Pdo();
-$p->mock(
-    "SELECT id FROM objects WHERE foo = :foo'", 
-    ['foo' => 'bar'],
-    [['id' => 1, 'foo' => 'bar']]
-);
+class ObjectsModel {
+    private PDO $pdo;
 
-// now use this $p object like you would any regular PDO
-$results = $p->query("SELECT id FROM objects WHERE foo='bar'");
+    public function __construct(private readonly PDO $pdo)
+    {
+    }
+    
+    public function getObjectsByFoo(string $foo): array
+    {
+        $statement = $this->pdo->prepare('SELECT id FROM objects WHERE foo = :foo');
 
-foreach ($results->fetch(PDO::FETCH_ASSOC) as $result) {
-    echo $result["foo"];  // bar
+        $statement->execute(['foo' => 'bar']);
+        
+        $objects = $statement->fetchAll();
+        
+        if (!$objects) {
+            throw new RuntimeException('Entity not found');
+        }
+        
+        return $objects;
+    }
+}
+```
+
+#### Tests with Pseudo
+
+```php
+<?php
+
+class ObjectsModelTest extends \PHPUnit\Framework\TestCase {
+    public function testGetObjectsByFoo(): void {
+        $pdo = new Pseudo\Pdo();
+
+        $objectsModel = new \ObjectsModel($pdo);
+
+        $pdo->mock(
+          "SELECT id FROM objects WHERE foo = :foo'", 
+          ['foo' => 'bar'],
+          [['id' => 1, 'foo' => 'bar']]
+        );
+
+        $objects = $objectsModel->getObjectsByFoo('bar');
+        
+        $this->assertEquals([['id' => 1, 'foo' => 'bar']], $objects);
+    }
 }
 ```
 
