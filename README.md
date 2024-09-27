@@ -37,7 +37,7 @@ composer require --dev actuallyconnor/pseudo
 $p = new Pseudo\Pdo();
 $p->mock(
     "SELECT id FROM objects WHERE foo = :foo'", 
-    ['bar' => 'bar'],
+    ['foo' => 'bar'],
     [['id' => 1, 'foo' => 'bar']]
 );
 
