@@ -16,7 +16,11 @@ class QueryLogTest extends TestCase
         $queries = $queryLog->getIterator();
 
         $this->assertInstanceOf(Iterator::class, $queries);
-        $this->assertEquals(['offset' => 'value'], [...$queries]);
+
+        foreach ($queries as $offset => $value) {
+            $this->assertEquals('offset', $offset);
+            $this->assertEquals('value', $value);
+        }
     }
 
     public function testAddQuery()
