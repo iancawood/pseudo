@@ -1,9 +1,6 @@
 <?php
 namespace Pseudo;
 
-
-use Pseudo\Util\PHPSQLParser;
-
 class ParsedQuery
 {
     private string $rawQuery;
@@ -14,7 +11,6 @@ class ParsedQuery
      */
     public function __construct(string $query)
     {
-        $parser = new PHPSQLParser();
         $this->rawQuery = $query;
         $this->hash = sha1($query);
     }
