@@ -4,7 +4,8 @@
 
 ### Changed
 
-- Updating ResultCollection::getResult() to be able to return bool
+- Updating ResultCollection::getResult() to be able to return
+  bool [f6e1b2c](https://github.com/ActuallyConnor/pseudo/commit/f6e1b2c78c2b8cac2f400327d8f59cc9b62666ce)
 
 ## 1.0.1
 
