@@ -34,4 +34,13 @@ class ResultCollectionTest extends TestCase
 
         $this->assertEquals($results->count(), 1);
     }
+
+    public function testGetResultBool(): void
+    {
+        $collection = new ResultCollection();
+
+        $collection->addQuery('SELECT 1', [], true);
+
+        $this->assertTrue($collection->getResult('SELECT 1'));
+    }
 }
