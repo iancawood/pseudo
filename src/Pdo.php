@@ -3,7 +3,7 @@
 namespace Pseudo;
 
 use InvalidArgumentException;
-use Pseudo\Exceptions\Exception;
+use Pseudo\Exceptions\PseudoException;
 use RuntimeException;
 
 class Pdo extends \PDO
@@ -23,7 +23,7 @@ class Pdo extends \PDO
     }
 
     /**
-     * @throws Exception
+     * @throws PseudoException
      */
     public function prepare($query, $options = null) : PdoStatement
     {
@@ -83,7 +83,7 @@ class Pdo extends \PDO
      * @param  mixed  ...$fetchModeArgs
      *
      * @return PdoStatement
-     * @throws Exception
+     * @throws PseudoException
      */
     public function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs) : PdoStatement
     {
@@ -97,14 +97,14 @@ class Pdo extends \PDO
             return $statement;
         }
 
-        throw new Exception('Unable to convert query to PdoStatement');
+        throw new PseudoException('Unable to convert query to PdoStatement');
     }
 
     /**
      * @param  null  $name
      *
      * @return false|string
-     * @throws Exception
+     * @throws PseudoException
      */
     public function lastInsertId($name = null) : false|string
     {
@@ -119,7 +119,7 @@ class Pdo extends \PDO
 
     /**
      * @return Result|false
-     * @throws Exception
+     * @throws PseudoException
      */
     private function getLastResult() : Result|false
     {

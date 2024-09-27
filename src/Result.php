@@ -2,7 +2,7 @@
 
 namespace Pseudo;
 
-use Pseudo\Exceptions\Exception;
+use Pseudo\Exceptions\PseudoException;
 
 class Result
 {
@@ -28,7 +28,7 @@ class Result
     }
 
     /**
-     * @throws Exception
+     * @throws PseudoException
      */
     public function addRow(array $row, $params = null) : void
     {
@@ -71,12 +71,12 @@ class Result
                 }
             }
 
-            throw new Exception("Cannot get rows with parameters on a non-parameterized result");
+            throw new PseudoException("Cannot get rows with parameters on a non-parameterized result");
         } else {
             if (!$this->isParameterized && isset($this->rows)) {
                 return $this->rows;
             }
-            throw new Exception("Cannot get rows without parameters on a parameterized result");
+            throw new PseudoException("Cannot get rows without parameters on a parameterized result");
         }
     }
 
@@ -134,14 +134,14 @@ class Result
     /**
      * @param $errorCode
      *
-     * @throws Exception
+     * @throws PseudoException
      */
     public function setErrorCode($errorCode) : void
     {
         if (ctype_alnum($errorCode) && strlen($errorCode) == 5) {
             $this->errorCode = $errorCode;
         } else {
-            throw new Exception("Error codes must be in ANSI SQL standard format");
+            throw new PseudoException("Error codes must be in ANSI SQL standard format");
         }
     }
 
@@ -213,12 +213,12 @@ class Result
     }
 
     /**
-     * @throws Exception
+     * @throws PseudoException
      */
     private function addNonParameterizedRow(array $row) : void
     {
         if ($this->isParameterized) {
-            throw new Exception("Cannot mix parameterized and non-parameterized rowsets");
+            throw new PseudoException("Cannot mix parameterized and non-parameterized rowsets");
         }
 
         $this->rows[] = $row;

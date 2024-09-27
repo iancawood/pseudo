@@ -3,7 +3,7 @@
 namespace Pseudo;
 
 use Countable;
-use Pseudo\Exceptions\Exception;
+use Pseudo\Exceptions\PseudoException;
 
 class ResultCollection implements Countable
 {
@@ -36,7 +36,7 @@ class ResultCollection implements Countable
     }
 
     /**
-     * @throws Exception
+     * @throws PseudoException
      */
     public function getResult(string|ParsedQuery $query): Result
     {
@@ -49,7 +49,7 @@ class ResultCollection implements Countable
         } else {
             $message = "Attempting an operation on an un-mocked query is not allowed, the raw query: "
                 . $query->getRawQuery();
-            throw new Exception($message);
+            throw new PseudoException($message);
         }
     }
 }

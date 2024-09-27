@@ -3,7 +3,7 @@
 namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
-use Pseudo\Exceptions\Exception;
+use Pseudo\Exceptions\PseudoException;
 use Pseudo\Pdo;
 use Pseudo\PdoStatement;
 use Pseudo\Result;
@@ -102,7 +102,7 @@ class PdoClassTest extends TestCase
     {
         $pdo = new Pdo();
 
-        $this->expectException(Exception::class);
+        $this->expectException(PseudoException::class);
         $pdo->query('SELECT * FROM users');
     }
 
@@ -212,7 +212,7 @@ class PdoClassTest extends TestCase
         $p       = new Pdo();
         try {
             $p->prepare('SELECT 123');
-        } catch (Exception $e) {
+        } catch (PseudoException $e) {
             $message = $e->getMessage();
         }
         $this->assertMatchesRegularExpression('/SELECT 123/', $message);

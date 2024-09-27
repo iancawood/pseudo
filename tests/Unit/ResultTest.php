@@ -3,7 +3,7 @@
 namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
-use Pseudo\Exceptions\Exception;
+use Pseudo\Exceptions\PseudoException;
 use Pseudo\Result;
 
 class ResultTest extends TestCase
@@ -13,7 +13,7 @@ class ResultTest extends TestCase
         $r = new Result;
         $r->setErrorCode("HY000");
         $this->assertEquals("HY000", $r->getErrorCode());
-        $this->expectException(Exception::class);
+        $this->expectException(PseudoException::class);
         $r->setErrorCode("121");
     }
 
@@ -82,7 +82,7 @@ class ResultTest extends TestCase
         $result = new Result();
         $result->setParams(['param']);
 
-        $this->expectException(Exception::class);
+        $this->expectException(PseudoException::class);
         $result->getRows();
     }
 
@@ -132,7 +132,7 @@ class ResultTest extends TestCase
         $result = new Result();
         $result->setParams(['param'], true);
 
-        $this->expectException(Exception::class);
+        $this->expectException(PseudoException::class);
         $result->addRow([['id' => 1], ['id' => 2], ['id' => 3]]);
     }
 }

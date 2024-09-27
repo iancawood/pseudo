@@ -4,7 +4,7 @@ namespace Pseudo;
 
 use ArrayIterator;
 use Iterator;
-use Pseudo\Exceptions\Exception;
+use Pseudo\Exceptions\PseudoException;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
@@ -64,7 +64,7 @@ class PdoStatement extends \PDOStatement
             $this->queryLog->addQuery($this->statement);
 
             return $success;
-        } catch (Exception) {
+        } catch (PseudoException) {
             return false;
         }
     }
@@ -216,7 +216,7 @@ class PdoStatement extends \PDOStatement
 
     /**
      * @return int
-     * @throws Exception
+     * @throws PseudoException
      */
     public function columnCount() : int
     {
