@@ -57,7 +57,7 @@ class PdoClassTest extends TestCase
         ];
 
         $p = new Pdo();
-        $p->mock($sql1, $result1);
+        $p->mock($sql1, null, $result1);
         $queries = $p->getMockedQueries();
         $this->assertTrue($queries->exists($sql1));
 
@@ -75,9 +75,9 @@ class PdoClassTest extends TestCase
             ]
         ];
 
-        $p->mock($sql2, $result1, $params2);
-        $p->mock($sql3, $result1, $params3);
-        $p->mock($sql3, $result2, $params4);
+        $p->mock($sql2, $params2, $result1);
+        $p->mock($sql3, $params3, $result1);
+        $p->mock($sql3, $params4, $result2);
 
         $this->assertEquals(3, count($p->getMockedQueries()));
     }
@@ -93,7 +93,7 @@ class PdoClassTest extends TestCase
                 "id"  => 1
             ]
         );
-        $p->mock("SELECT * FROM test WHERE foo='bar'", $expectedRows);
+        $p->mock("SELECT * FROM test WHERE foo='bar'", null, $expectedRows);
         $result = $p->query("SELECT * FROM test WHERE foo='bar'");
         $this->assertEquals($expectedRows->getRows(), $result->fetchAll(PDO::FETCH_ASSOC));
     }
@@ -111,7 +111,7 @@ class PdoClassTest extends TestCase
         $sql = "INSERT INTO foo VALUES ('1')";
         $r   = new Result();
         $p   = new Pdo();
-        $p->mock($sql, $r);
+        $p->mock($sql, null, $r);
         $p->query($sql);
         $this->assertEquals(0, $p->lastInsertId());
         $r->setInsertId(1);
@@ -132,7 +132,7 @@ class PdoClassTest extends TestCase
         $p   = new Pdo();
         $r   = new Result();
         $r->setInsertId(10);
-        $p->mock($sql, $r);
+        $p->mock($sql, null, $r);
         $statement = $p->prepare($sql);
         $statement->execute();
         $this->assertEquals(10, $p->lastInsertId());
@@ -143,7 +143,7 @@ class PdoClassTest extends TestCase
         $sql = "SELECT 1";
         $r   = new Result();
         $p   = new Pdo();
-        $p->mock($sql, $r);
+        $p->mock($sql, null, $r);
         $p->query($sql);
         $this->assertEquals(0, $p->lastInsertId());
         $r->setInsertId(1);
@@ -156,7 +156,7 @@ class PdoClassTest extends TestCase
         $sql = "SELECT 1";
         $r   = new Result();
         $p   = new Pdo();
-        $p->mock($sql, $r);
+        $p->mock($sql, null, $r);
         $p->query($sql);
         $this->assertEquals(0, $p->lastInsertId());
         $r->setInsertId(1);
@@ -169,7 +169,7 @@ class PdoClassTest extends TestCase
         $sql = "SELECT 1";
         $p   = new Pdo();
         $r   = new Result();
-        $p->mock($sql, $r);
+        $p->mock($sql, null, $r);
         $results = $p->exec($sql);
         $this->assertEquals(0, $results);
         $r->setAffectedRowCount(5);

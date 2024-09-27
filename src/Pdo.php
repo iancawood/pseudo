@@ -150,10 +150,10 @@ class Pdo extends \PDO
 
     /**
      * @param  string  $sql
-     * @param  null  $expectedResults
      * @param  null  $params
+     * @param  null  $expectedResults
      */
-    public function mock(string $sql, $expectedResults = null, $params = null) : void
+    public function mock(string $sql, $params = null, $expectedResults = null) : void
     {
         $this->mockedQueries->addQuery($sql, $params, $expectedResults);
     }

@@ -37,8 +37,8 @@ arrays of result data.
 $p = new Pseudo\Pdo();
 $p->mock(
     "SELECT id FROM objects WHERE foo = :foo'", 
-    [['id' => 1, 'foo' => 'bar']],
-    ['bar' => 'bar']
+    ['bar' => 'bar'],
+    [['id' => 1, 'foo' => 'bar']]
 );
 
 // now use this $p object like you would any regular PDO
