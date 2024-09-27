@@ -126,4 +126,13 @@ class ResultTest extends TestCase
             $result->nextRow()
         );
     }
+
+    public function testFailToAddNonParameterizedRowToParameterizedResults() : void
+    {
+        $result = new Result();
+        $result->setParams(['param'], true);
+
+        $this->expectException(Exception::class);
+        $result->addRow([['id' => 1], ['id' => 2], ['id' => 3]]);
+    }
 }
