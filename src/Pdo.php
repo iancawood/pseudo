@@ -149,11 +149,11 @@ class Pdo extends \PDO
     }
 
     /**
-     * @param  string  $sql
-     * @param  null  $params
-     * @param  null  $expectedResults
+     * @param string $sql
+     * @param array|null $params
+     * @param mixed $expectedResults
      */
-    public function mock(string $sql, $params = null, $expectedResults = null) : void
+    public function mock(string $sql, ?array $params = null, mixed $expectedResults = null) : void
     {
         $this->mockedQueries->addQuery($sql, $params, $expectedResults);
     }
