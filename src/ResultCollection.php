@@ -4,6 +4,7 @@ namespace Pseudo;
 
 use Countable;
 use Pseudo\Exceptions\PseudoException;
+use Throwable;
 
 class ResultCollection implements Countable
 {
@@ -24,6 +25,8 @@ class ResultCollection implements Countable
             $storedResults = $results;
         } elseif (is_bool($results)) {
             $storedResults = $results;
+        } elseif ($results instanceof Throwable) {
+            throw $results;
         } else {
             $storedResults = new Result;
         }
