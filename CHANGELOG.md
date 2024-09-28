@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.3
+
+### Changed
+
+- Add ability to throw exception as expected
+  result [61c6930](https://github.com/ActuallyConnor/pseudo/commit/61c6930b432b224289ff4b18e6b12bb6dfb963ed)
+
 ## 1.0.2
 
 ### Changed
