@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Pseudo\UnitTest;
+namespace Pseudo\UnitTest\SampleModels;
 
 use PDO;
-use PDOStatement;
 
 class PdoQueries
 {
@@ -19,7 +18,7 @@ class PdoQueries
         // select all users
         $stmt = $this->pdo->query("SELECT * FROM users");
 
-        return $stmt->fetch();
+        return $stmt->fetch(Pdo::FETCH_ASSOC);
     }
 
     public function selectSingleRow() : ?array

@@ -6,6 +6,8 @@ namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
 use Pseudo\Pdo;
+use Pseudo\Result;
+use Pseudo\UnitTest\SampleModels\PdoQueries;
 
 class PdoQueriesTest extends TestCase
 {
@@ -26,12 +28,20 @@ class PdoQueriesTest extends TestCase
             'SELECT * FROM users',
             [],
             [
-                'id'   => 1,
-                'name' => 'John Doe',
+                [
+                    'id'   => 1,
+                    'name' => 'John Doe',
+                ]
             ]
         );
 
-        $this->expectNotToPerformAssertions();
-        $this->pdoQueries->selectQueryWithNoParameters();
+        $data = $this->pdoQueries->selectQueryWithNoParameters();
+        $this->assertEquals(
+            [
+                'id'   => 1,
+                'name' => 'John Doe',
+            ],
+            $data
+        );
     }
 }
