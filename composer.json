@@ -1,5 +1,5 @@
 {
-    "name": "actuallyconnor/pseudo",
+    "name": "pseudo/pseudo",
     "description": "A system for mocking PHP PDO connections",
     "type": "library",
     "license": "MIT",
