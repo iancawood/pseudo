@@ -6,7 +6,6 @@ namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
 use Pseudo\Pdo;
-use Pseudo\Result;
 use Pseudo\UnitTest\SampleModels\PdoQueries;
 
 class PdoQueriesTest extends TestCase

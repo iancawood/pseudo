@@ -18,7 +18,7 @@ class PdoQueries
         // select all users
         $stmt = $this->pdo->query("SELECT * FROM users");
 
-        return $stmt->fetch(Pdo::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function selectSingleRow() : ?array
@@ -26,7 +26,7 @@ class PdoQueries
         // getting the last registered user
         $stmt = $this->pdo->query("SELECT * FROM users ORDER BY id DESC LIMIT 1");
 
-        return $stmt->fetch();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function selectMultipleRowsUsingFetch() : array
@@ -35,7 +35,7 @@ class PdoQueries
 
         return array_map(
             fn($row) => $row['name'],
-            $stmt->fetch()
+            $stmt->fetch(PDO::FETCH_ASSOC)
         );
     }
 
@@ -56,7 +56,7 @@ class PdoQueries
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id=?");
         $stmt->execute([1]);
 
-        return $stmt->fetch();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function selectQueryWithNamedPlaceholders() : ?array
@@ -65,7 +65,7 @@ class PdoQueries
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id=:id");
         $stmt->execute(['id' => 1]);
 
-        return $stmt->fetch();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function selectingMultipleRowsUsingPlaceholdersAndFetch() : array
@@ -75,7 +75,7 @@ class PdoQueries
 
         return array_map(
             fn($row) => $row['name'],
-            $stmt->fetch()
+            $stmt->fetch(PDO::FETCH_ASSOC)
         );
     }
 
