@@ -5,6 +5,7 @@ namespace Pseudo\UnitTest;
 use PHPUnit\Framework\TestCase;
 use Pseudo\Exceptions\PseudoException;
 use Pseudo\ResultCollection;
+use RuntimeException;
 
 class ResultCollectionTest extends TestCase
 {
@@ -42,5 +43,14 @@ class ResultCollectionTest extends TestCase
         $collection->addQuery('SELECT 1', [], true);
 
         $this->assertTrue($collection->getResult('SELECT 1'));
+    }
+
+    public function testGetResultException()
+    {
+        $collection = new ResultCollection();
+        $collection->addQuery('SELECT 1', [], new RuntimeException());
+
+        $this->expectException(RuntimeException::class);
+        $collection->getResult('SELECT 1');
     }
 }

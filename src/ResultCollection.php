@@ -26,7 +26,7 @@ class ResultCollection implements Countable
         } elseif (is_bool($results)) {
             $storedResults = $results;
         } elseif ($results instanceof Throwable) {
-            throw $results;
+            $storedResults = $results;
         } else {
             $storedResults = new Result;
         }
@@ -42,6 +42,7 @@ class ResultCollection implements Countable
 
     /**
      * @throws PseudoException
+     * @throws Throwable
      */
     public function getResult(string|ParsedQuery $query): Result|bool
     {
@@ -53,6 +54,8 @@ class ResultCollection implements Countable
             return $result;
         } elseif (is_bool($result)) {
             return $result;
+        } elseif($result instanceof Throwable) {
+            throw $result;
         } else {
             $message = "Attempting an operation on an un-mocked query is not allowed, the raw query: "
                 . $query->getRawQuery();
