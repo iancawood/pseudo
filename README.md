@@ -21,12 +21,12 @@ can now inject a Pseudo\Pdo object transparently, giving yourself 100% flexibili
 *thinks* is the database. In your unit test, you can express the mocks for your test in terms of SQL statements and
 arrays of result data.
 
-Find the package on [packagist.org](https://packagist.org/packages/actuallyconnor/pseudo)
+Find the package on [packagist.org](https://packagist.org/packages/pseudo/pseudo)
 
 ## Installation
 
 ```
-composer require --dev actuallyconnor/pseudo
+composer require --dev pseudo/pseudo
 ```
 
 ### Usage
