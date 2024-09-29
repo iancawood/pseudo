@@ -1,3 +1,5 @@
 site_name: pseudo/pseudo
 nav:
   - Home: index.md
+  - Pseudo\Pdo: pdo.md
+theme: readthedocs

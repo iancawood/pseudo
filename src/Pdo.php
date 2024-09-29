@@ -4,7 +4,7 @@ namespace Pseudo;
 
 use InvalidArgumentException;
 use Pseudo\Exceptions\PseudoException;
-use RuntimeException;
+use Throwable;
 
 class Pdo extends \PDO
 {
@@ -23,7 +23,7 @@ class Pdo extends \PDO
     }
 
     /**
-     * @throws PseudoException
+     * @throws PseudoException|Throwable
      */
     public function prepare($query, $options = null) : PdoStatement
     {
@@ -83,7 +83,7 @@ class Pdo extends \PDO
      * @param  mixed  ...$fetchModeArgs
      *
      * @return PdoStatement
-     * @throws PseudoException
+     * @throws PseudoException|Throwable
      */
     public function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs) : PdoStatement
     {
@@ -119,7 +119,7 @@ class Pdo extends \PDO
 
     /**
      * @return Result|false
-     * @throws PseudoException
+     * @throws PseudoException|Throwable
      */
     private function getLastResult() : Result|false
     {
