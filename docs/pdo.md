@@ -1,6 +1,7 @@
 # `Pseudo/Pdo` Class Documentation
 
-The `Pdo` class extends the built-in `\PDO` class and is part of the `Pseudo` namespace. It is designed to allow for mock query handling and provides additional functionality to manage transactions, query logging, and result mocking.
+The `Pdo` class extends the built-in `\PDO` class and is part of the `Pseudo` namespace. It is designed to allow for
+mock query handling and provides additional functionality to manage transactions, query logging, and result mocking.
 
 ## Namespace
 
@@ -22,12 +23,13 @@ namespace Pseudo;
 
 ## Constructor
 
-### `__construct(ResultCollection $collection = null)`
+#### `__construct(ResultCollection $collection = null)`
 
 Initializes the `Pdo` instance.
 
 - **Parameters:**
-    - `ResultCollection|null $collection`: An optional collection of mocked queries. If not provided, a new `ResultCollection` is created.
+    - `ResultCollection|null $collection`: An optional collection of mocked queries. If not provided, a new
+      `ResultCollection` is created.
 
 - **Example:**
   ```php
@@ -36,7 +38,9 @@ Initializes the `Pdo` instance.
 
 ## Methods
 
-### `prepare($query, $options = null): PdoStatement`
+### prepare
+
+#### `prepare($query, $options = null): PdoStatement`
 
 Prepares a mock query and returns a `PdoStatement`.
 
@@ -52,7 +56,9 @@ Prepares a mock query and returns a `PdoStatement`.
   $stmt = $pdo->prepare("SELECT * FROM users");
   ```
 
-### `beginTransaction(): bool`
+### beginTransaction
+
+#### `beginTransaction(): bool`
 
 Starts a new transaction.
 
@@ -63,7 +69,9 @@ Starts a new transaction.
   $pdo->beginTransaction();
   ```
 
-### `commit(): bool`
+### commit
+
+#### `commit(): bool`
 
 Commits the current transaction.
 
@@ -74,7 +82,9 @@ Commits the current transaction.
   $pdo->commit();
   ```
 
-### `rollBack(): bool`
+### rollback
+
+#### `rollBack(): bool`
 
 Rolls back the current transaction.
 
@@ -85,7 +95,9 @@ Rolls back the current transaction.
   $pdo->rollBack();
   ```
 
-### `inTransaction(): bool`
+### inTransaction
+
+#### `inTransaction(): bool`
 
 Checks if there is an active transaction.
 
@@ -98,7 +110,9 @@ Checks if there is an active transaction.
   }
   ```
 
-### `exec($statement): false|int`
+### exec
+
+#### `exec($statement): false|int`
 
 Executes an SQL statement and returns the number of affected rows.
 
@@ -112,7 +126,9 @@ Executes an SQL statement and returns the number of affected rows.
   $affectedRows = $pdo->exec("DELETE FROM users WHERE id = 1");
   ```
 
-### `query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PdoStatement`
+### query
+
+#### `query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PdoStatement`
 
 Executes an SQL query and returns a `PdoStatement`.
 
@@ -129,7 +145,9 @@ Executes an SQL query and returns a `PdoStatement`.
   $stmt = $pdo->query("SELECT * FROM users");
   ```
 
-### `lastInsertId($name = null): false|string`
+### lastInsertId
+
+#### `lastInsertId($name = null): false|string`
 
 Returns the ID of the last inserted row, or `false` if no such ID exists.
 
@@ -143,7 +161,9 @@ Returns the ID of the last inserted row, or `false` if no such ID exists.
   $id = $pdo->lastInsertId();
   ```
 
-### `save(string $filePath): void`
+### save
+
+#### `save(string $filePath): void`
 
 Saves the current mocked query collection to a file.
 
@@ -155,7 +175,9 @@ Saves the current mocked query collection to a file.
   $pdo->save('queries.txt');
   ```
 
-### `load($filePath): void`
+### load
+
+#### `load($filePath): void`
 
 Loads a mocked query collection from a file.
 
@@ -167,7 +189,9 @@ Loads a mocked query collection from a file.
   $pdo->load('queries.txt');
   ```
 
-### `mock(string $sql, ?array $params = null, mixed $expectedResults = null): void`
+### mock
+
+#### `mock(string $sql, ?array $params = null, mixed $expectedResults = null): void`
 
 Mocks a query and its expected result.
 
@@ -181,7 +205,9 @@ Mocks a query and its expected result.
   $pdo->mock("SELECT * FROM users", null, $expectedResults);
   ```
 
-### `getMockedQueries(): ResultCollection`
+### getMockedQueries
+
+#### `getMockedQueries(): ResultCollection`
 
 Returns the current mocked queries collection.
 
