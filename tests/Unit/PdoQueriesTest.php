@@ -13,22 +13,22 @@ class PdoQueriesTest extends TestCase
     private Pdo $pdo;
     private PdoQueries $pdoQueries;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->pdo        = new Pdo();
+        $this->pdo = new Pdo();
         $this->pdoQueries = new PdoQueries($this->pdo);
     }
 
-    public function testSelectQueryWithNoParameters() : void
+    public function testSelectQueryWithNoParameters(): void
     {
         $this->pdo->mock(
             'SELECT * FROM users',
             [],
             [
                 [
-                    'id'   => 1,
+                    'id' => 1,
                     'name' => 'John Doe',
                 ]
             ]
@@ -37,10 +37,52 @@ class PdoQueriesTest extends TestCase
         $data = $this->pdoQueries->selectQueryWithNoParameters();
         $this->assertEquals(
             [
-                'id'   => 1,
+                'id' => 1,
                 'name' => 'John Doe',
             ],
             $data
         );
+    }
+
+    public function testSelectQueryWithNamedPlaceholders(): void
+    {
+        $this->pdo->mock(
+            'SELECT * FROM users WHERE id=:id',
+            ['id' => 1],
+            [
+                ['id' => 1, 'name' => 'John Doe']
+            ]
+        );
+
+        $data = $this->pdoQueries->selectQueryWithNamedPlaceholders();
+        $this->assertEquals(['id' => 1, 'name' => 'John Doe'], $data);
+    }
+
+    public function testSelectQueryWithNamedPlaceholdersAndFetchAll(): void
+    {
+        $this->pdo->mock(
+            'SELECT * FROM users WHERE id=:id',
+            ['id' => 1],
+            [
+                ['id' => 1, 'name' => 'John Doe']
+            ]
+        );
+
+        $data = $this->pdoQueries->selectQueryWithNamedPlaceholders();
+        $this->assertEquals(['id' => 1, 'name' => 'John Doe'], $data);
+    }
+
+    public function testFindAllByIds(): void
+    {
+        $this->pdo->mock(
+            'SELECT * FROM users WHERE id IN (:userIds) ORDER BY created_at DESC',
+            [':userIds' => '1'],
+            [
+                ['id' => 1, 'name' => 'John Doe']
+            ]
+        );
+
+        $data = $this->pdoQueries->findAllByIds([1]);
+        $this->assertEquals([['id' => 1, 'name' => 'John Doe']], $data);
     }
 }

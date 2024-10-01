@@ -125,7 +125,7 @@ class PdoStatement extends \PDOStatement
 
     public function fetchAll(int $mode = PDO::FETCH_DEFAULT, mixed ...$args) : array
     {
-        $rows        = $this->result->getRows() ?: [];
+        $rows        = $this->result->getRows() ?? [];
         $returnArray = [];
         foreach ($rows as $row) {
             $returnArray[] = $this->proccessFetchedRow($row, $mode);

@@ -62,6 +62,7 @@ class Result
         if (!empty($this->params) && empty($params)) {
             $params = $this->params;
         }
+
         if ($params) {
             if ($this->isParameterized) {
                 if (isset($this->rows[$this->stringifyParameterSet($params)])) {
