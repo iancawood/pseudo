@@ -23,6 +23,10 @@ arrays of result data.
 
 Find the package on [packagist.org](https://packagist.org/packages/pseudo/pseudo)
 
+## Documentation
+
+https://pseudo-pdo.org
+
 ## Installation
 
 ```
