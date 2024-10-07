@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Pseudo\Pdo;
 use Pseudo\Result;
 use Pseudo\UnitTest\SampleModels\PdoQueries;
+use RuntimeException;
 
 class PdoQueriesTest extends TestCase
 {
@@ -112,6 +113,18 @@ class PdoQueriesTest extends TestCase
         );
 
         $this->expectNotToPerformAssertions();
+        $this->pdoQueries->deleteWithPlaceholder(1);
+    }
+
+    public function testFailToDeleteWithPlaceholder(): void
+    {
+        $this->pdo->mock(
+            'DELETE FROM users WHERE id = ?',
+            [1],
+            false
+        );
+
+        $this->expectException(RuntimeException::class);
         $this->pdoQueries->deleteWithPlaceholder(1);
     }
 }

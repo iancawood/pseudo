@@ -44,7 +44,8 @@ class ResultCollectionTest extends TestCase
 
         $result = $collection->getResult("SELECT 1");
 
-        $this->assertTrue($result->getRows()[0]);
+        $this->assertEmpty($result->getRows());
+        $this->assertTrue($result->getExecutionResult());
     }
 
     public function testGetResultException()

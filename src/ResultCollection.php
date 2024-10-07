@@ -24,7 +24,7 @@ class ResultCollection implements Countable
         } elseif ($results instanceof Result) {
             $storedResults = $results;
         } elseif (is_bool($results)) {
-            $storedResults = new Result([$results], $params);
+            $storedResults = new Result(null, $params, $results);
         } elseif ($results instanceof Throwable) {
             $storedResults = $results;
         } else {
@@ -52,7 +52,7 @@ class ResultCollection implements Countable
         $result = (isset($this->queries[$query->getHash()])) ? $this->queries[$query->getHash()] : null;
         if ($result instanceof Result) {
             return $result;
-        } elseif($result instanceof Throwable) {
+        } elseif ($result instanceof Throwable) {
             throw $result;
         } else {
             $message = "Attempting an operation on an un-mocked query is not allowed, the raw query: "

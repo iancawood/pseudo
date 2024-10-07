@@ -58,15 +58,23 @@ class PdoStatement extends \PDOStatement
     public function execute(array $params = null) : bool
     {
         $params = array_merge((array)$params, $this->boundParams);
-        try {
-            $this->result->setParams($params, !empty($this->boundParams));
-            $success = (bool)$this->result->getRows($params ?: []);
-            $this->queryLog->addQuery($this->statement);
+        $this->result->setParams($params, !empty($this->boundParams));
+        $this->queryLog->addQuery($this->statement);
 
-            return $success;
-        } catch (PseudoException) {
-            return false;
+        if ($this->result->hasExecutionResult()) {
+            return $this->result->getExecutionResult();
         }
+
+        // TODO: I'm not a fan of exception-based logic, but I want to avoid a backwards incompatibility change here.
+        // Perhaps we can address in the next major version update
+        try {
+            $success = (bool)$this->result->getRows($params ?: []);
+        } catch (PseudoException) {
+            $success = false;
+        }
+
+
+        return $success;
     }
 
     public function fetch($mode = null, $cursorOrientation = PDO::FETCH_ORI_NEXT, $cursorOffset = 0) : mixed

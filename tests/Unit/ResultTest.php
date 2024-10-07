@@ -3,6 +3,7 @@
 namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
+use Pseudo\Exceptions\LogicException;
 use Pseudo\Exceptions\PseudoException;
 use Pseudo\Result;
 
@@ -20,14 +21,14 @@ class ResultTest extends TestCase
     public function testNextRow()
     {
         $row1 = [
-            'id'  => 1,
+            'id' => 1,
             'foo' => 'bar',
         ];
         $row2 = [
-            'id'  => 2,
+            'id' => 2,
             'foo' => 'baz'
         ];
-        $r    = new Result();
+        $r = new Result();
         $r->addRow($row1);
         $r->addRow($row2);
 
@@ -38,8 +39,8 @@ class ResultTest extends TestCase
 
     public function testAddRow()
     {
-        $row    = [
-            'id'  => 1,
+        $row = [
+            'id' => 1,
             'foo' => 'bar'
         ];
         $params = [
@@ -58,10 +59,10 @@ class ResultTest extends TestCase
     public function testReset()
     {
         $row = [
-            'id'  => 1,
+            'id' => 1,
             'foo' => 'bar'
         ];
-        $r   = new Result();
+        $r = new Result();
         $r->addRow($row);
         $this->assertEquals($row, $r->nextRow());
         $this->assertEquals(null, $r->nextRow());
@@ -69,7 +70,7 @@ class ResultTest extends TestCase
         $this->assertEquals($row, $r->nextRow());
     }
 
-    public function testSetParametersParameterized() : void
+    public function testSetParametersParameterized(): void
     {
         $result = new Result();
         $result->setParams(['param'], true);
@@ -77,7 +78,7 @@ class ResultTest extends TestCase
         $this->assertEquals([], $result->getRows());
     }
 
-    public function testSetParametersNotParameterized() : void
+    public function testSetParametersNotParameterized(): void
     {
         $result = new Result();
         $result->setParams(['param']);
@@ -86,7 +87,7 @@ class ResultTest extends TestCase
         $result->getRows();
     }
 
-    public function testEmptyRowProvided() : void
+    public function testEmptyRowProvided(): void
     {
         $result = new Result();
         $result->addRow([]);
@@ -94,22 +95,22 @@ class ResultTest extends TestCase
         $this->assertCount(0, $result->getRows());
     }
 
-    public function testSetAffectedRowCount() : void
+    public function testSetAffectedRowCount(): void
     {
-        $query  = "SELECT * FROM test";
-        $rows   = [['id' => 1], ['id' => 2], ['id' => 3]];
+        $query = "SELECT * FROM test";
+        $rows = [['id' => 1], ['id' => 2], ['id' => 3]];
         $result = new Result($rows);
         $result->setAffectedRowCount(count($rows));
         $this->assertEquals(3, $result->getAffectedRowCount());
     }
 
-    public function testGetNextRowWhenRowsNotSet() : void
+    public function testGetNextRowWhenRowsNotSet(): void
     {
         $result = new Result();
         $this->assertFalse($result->nextRow());
     }
 
-    public function testGetNexRowWhenParameterized() : void
+    public function testGetNexRowWhenParameterized(): void
     {
         $result = new Result();
         $result->setParams(['param'], true);
@@ -127,12 +128,20 @@ class ResultTest extends TestCase
         );
     }
 
-    public function testFailToAddNonParameterizedRowToParameterizedResults() : void
+    public function testFailToAddNonParameterizedRowToParameterizedResults(): void
     {
         $result = new Result();
         $result->setParams(['param'], true);
 
         $this->expectException(PseudoException::class);
         $result->addRow([['id' => 1], ['id' => 2], ['id' => 3]]);
+    }
+
+    public function testFailToGetUnsetExecutionResult(): void
+    {
+        $result = new Result();
+
+        $this->expectException(LogicException::class);
+        $result->getExecutionResult();
     }
 }

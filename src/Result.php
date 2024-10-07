@@ -2,11 +2,13 @@
 
 namespace Pseudo;
 
+use Pseudo\Exceptions\LogicException;
 use Pseudo\Exceptions\PseudoException;
 
 class Result
 {
     private array $rows = [];
+    private ?bool $executionResult = null;
     private bool $isParameterized = false;
     private string $errorCode;
     private string $errorInfo;
@@ -15,22 +17,24 @@ class Result
     private int $rowOffset = 0;
     private array $params = [];
 
-    public function __construct($rows = null, $params = null)
+    public function __construct($rows = null, $params = null, $executionResult = null)
     {
         if (is_array($rows)) {
             if ($params) {
                 $this->rows[$this->stringifyParameterSet($params)] = $rows;
-                $this->isParameterized                             = true;
+                $this->isParameterized = true;
             } else {
                 $this->rows = $rows;
             }
         }
+
+        $this->executionResult = $executionResult;
     }
 
     /**
      * @throws PseudoException
      */
-    public function addRow(array $row, $params = null) : void
+    public function addRow(array $row, $params = null): void
     {
         if (empty($row)) {
             return;
@@ -49,7 +53,7 @@ class Result
         }
     }
 
-    public function setParams($params, bool $parameterize = false) : void
+    public function setParams($params, bool $parameterize = false): void
     {
         $this->params = $params;
         if ($parameterize) {
@@ -84,11 +88,11 @@ class Result
     /**
      * Returns the next row if it exists, otherwise returns false
      *
-     * @param  array  $rows  Rows to get row from
+     * @param array $rows Rows to get row from
      *
      * @return false|array Next row (false if doesn't exist)
      */
-    private function getRowIfExists(array $rows) : false|array
+    private function getRowIfExists(array $rows): false|array
     {
         if (!isset($rows[$this->rowOffset])) {
             return false;
@@ -102,7 +106,7 @@ class Result
      *
      * @return false|array
      */
-    public function nextRow() : false|array
+    public function nextRow(): false|array
     {
         if (empty($this->rows)) {
             return false;
@@ -122,12 +126,12 @@ class Result
     }
 
 
-    public function setInsertId($insertId) : void
+    public function setInsertId($insertId): void
     {
         $this->insertId = $insertId;
     }
 
-    public function getInsertId() : int
+    public function getInsertId(): int
     {
         return $this->insertId;
     }
@@ -137,7 +141,7 @@ class Result
      *
      * @throws PseudoException
      */
-    public function setErrorCode($errorCode) : void
+    public function setErrorCode($errorCode): void
     {
         if (ctype_alnum($errorCode) && strlen($errorCode) == 5) {
             $this->errorCode = $errorCode;
@@ -149,7 +153,7 @@ class Result
     /**
      * @return string
      */
-    public function getErrorCode() : string
+    public function getErrorCode(): string
     {
         return $this->errorCode;
     }
@@ -157,7 +161,7 @@ class Result
     /**
      * @param $errorInfo
      */
-    public function setErrorInfo($errorInfo) : void
+    public function setErrorInfo($errorInfo): void
     {
         $this->errorInfo = $errorInfo;
     }
@@ -165,32 +169,53 @@ class Result
     /**
      * @return string
      */
-    public function getErrorInfo() : string
+    public function getErrorInfo(): string
     {
         return $this->errorInfo;
     }
 
-    public function setAffectedRowCount($affectedRowCount) : void
+    public function setAffectedRowCount($affectedRowCount): void
     {
         $this->affectedRowCount = $affectedRowCount;
     }
 
-    public function getAffectedRowCount() : int
+    public function getAffectedRowCount(): int
     {
         return $this->affectedRowCount;
     }
 
-    public function isOrdinalArray(array $arr) : bool
+    public function isOrdinalArray(array $arr): bool
     {
         return !(is_string(key($arr)));
     }
 
-    public function reset() : void
+    public function reset(): void
     {
         $this->rowOffset = 0;
     }
 
-    private function stringifyParameterSet(array $params) : string
+    /**
+     * @return bool
+     */
+    public function hasExecutionResult(): bool
+    {
+        return isset($this->executionResult);
+    }
+
+    /**
+     * @return bool
+     * @throws LogicException
+     */
+    public function getExecutionResult(): bool
+    {
+        if (!isset($this->executionResult)) {
+            throw new LogicException('Execution result is not set');
+        }
+
+        return $this->executionResult;
+    }
+
+    private function stringifyParameterSet(array $params): string
     {
         if ($this->isOrdinalArray($params)) {
             return implode(',', $params);
@@ -205,18 +230,18 @@ class Result
         }
     }
 
-    private function initializeParameterizedRows(string $parameterKey, array $row) : void
+    private function initializeParameterizedRows(string $parameterKey, array $row): void
     {
         if (empty($this->rows)) {
             $this->rows[$parameterKey][] = $row;
-            $this->isParameterized       = true;
+            $this->isParameterized = true;
         }
     }
 
     /**
      * @throws PseudoException
      */
-    private function addNonParameterizedRow(array $row) : void
+    private function addNonParameterizedRow(array $row): void
     {
         if ($this->isParameterized) {
             throw new PseudoException("Cannot mix parameterized and non-parameterized rowsets");

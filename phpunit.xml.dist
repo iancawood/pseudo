@@ -8,6 +8,7 @@
   <source>
     <include>
       <directory suffix=".php">src</directory>
+      <directory suffix=".php">tests/Unit/SampleModels</directory>
     </include>
   </source>
 </phpunit>
