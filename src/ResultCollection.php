@@ -24,7 +24,7 @@ class ResultCollection implements Countable
         } elseif ($results instanceof Result) {
             $storedResults = $results;
         } elseif (is_bool($results)) {
-            $storedResults = $results;
+            $storedResults = new Result([$results], $params);
         } elseif ($results instanceof Throwable) {
             $storedResults = $results;
         } else {
@@ -51,8 +51,6 @@ class ResultCollection implements Countable
         }
         $result = (isset($this->queries[$query->getHash()])) ? $this->queries[$query->getHash()] : null;
         if ($result instanceof Result) {
-            return $result;
-        } elseif (is_bool($result)) {
             return $result;
         } elseif($result instanceof Throwable) {
             throw $result;

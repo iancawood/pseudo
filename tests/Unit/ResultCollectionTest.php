@@ -42,7 +42,9 @@ class ResultCollectionTest extends TestCase
 
         $collection->addQuery('SELECT 1', [], true);
 
-        $this->assertTrue($collection->getResult('SELECT 1'));
+        $result = $collection->getResult("SELECT 1");
+
+        $this->assertTrue($result->getRows()[0]);
     }
 
     public function testGetResultException()

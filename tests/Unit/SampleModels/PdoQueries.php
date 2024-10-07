@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pseudo\UnitTest\SampleModels;
 
 use PDO;
+use RuntimeException;
 
 class PdoQueries
 {
@@ -127,6 +128,18 @@ class PdoQueries
             fn ($row) => self::parse($row),
             $rows
         );
+    }
+
+    public function deleteWithPlaceholder(int $id): void
+    {
+        $deleted = $this
+            ->pdo
+            ->prepare('DELETE FROM users WHERE id = ?')
+            ->execute([$id]);
+
+        if (!$deleted) {
+            throw new RuntimeException(sprintf('Failed to delete user with ID "%s"', $id));
+        }
     }
 
     private static function parse(array $row): array

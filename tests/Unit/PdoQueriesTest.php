@@ -6,6 +6,7 @@ namespace Pseudo\UnitTest;
 
 use PHPUnit\Framework\TestCase;
 use Pseudo\Pdo;
+use Pseudo\Result;
 use Pseudo\UnitTest\SampleModels\PdoQueries;
 
 class PdoQueriesTest extends TestCase
@@ -20,6 +21,8 @@ class PdoQueriesTest extends TestCase
         $this->pdo = new Pdo();
         $this->pdoQueries = new PdoQueries($this->pdo);
     }
+
+
 
     public function testSelectQueryWithNoParameters(): void
     {
@@ -42,6 +45,20 @@ class PdoQueriesTest extends TestCase
             ],
             $data
         );
+    }
+
+    public function testSelectQueryWithPlaceholders(): void
+    {
+        $this->pdo->mock(
+            'SELECT * FROM users WHERE id=?',
+            [1],
+            [
+                ['id' => 1, 'name' => 'John Doe']
+            ]
+        );
+
+        $data = $this->pdoQueries->selectQueryWithPlaceholders();
+        $this->assertEquals(['id' => 1, 'name' => 'John Doe'], $data);
     }
 
     public function testSelectQueryWithNamedPlaceholders(): void
@@ -84,5 +101,17 @@ class PdoQueriesTest extends TestCase
 
         $data = $this->pdoQueries->findAllByIds([1]);
         $this->assertEquals([['id' => 1, 'name' => 'John Doe']], $data);
+    }
+
+    public function testDeleteWithPlaceholder(): void
+    {
+        $this->pdo->mock(
+            'DELETE FROM users WHERE id = ?',
+            [1],
+            true
+        );
+
+        $this->expectNotToPerformAssertions();
+        $this->pdoQueries->deleteWithPlaceholder(1);
     }
 }
