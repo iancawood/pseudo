@@ -1,0 +1,47 @@
+---
+version: 2
+
+updates:
+  #######################################
+  # Composer updates
+  #######################################
+  - package-ecosystem: "composer"
+    open-pull-requests-limit: 10
+    directory: "/"
+    registries:
+      - "packagist"
+    allow:
+      - dependency-type: "all"
+    groups:
+      major-updates:
+        update-types:
+          - "major"
+      minor-patch-updates:
+        update-types:
+          - "minor"
+          - "patch"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Canada/Eastern"
+
+  #######################################
+  # Github Actions
+  #######################################
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    registries: "*"
+    groups:
+      major-updates:
+        update-types:
+          - "major"
+      minor-patch-updates:
+        update-types:
+          - "minor"
+          - "patch"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Canada/Eastern"
