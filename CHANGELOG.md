@@ -1,5 +1,18 @@
 # Change Log
 
+## 1.0.6
+
+**Full Changelog**: https://github.com/ActuallyConnor/pseudo/compare/1.0.5...1.0.6
+
+## 1.0.5
+
+**Full Changelog**: https://github.com/ActuallyConnor/pseudo/compare/1.0.4...1.0.5
+
+## 1.0.4
+
+**Full Changelog**: https://github.com/ActuallyConnor/pseudo/compare/1.0.3...1.0.4
+
+
 ## 1.0.3
 
 ### Changed
