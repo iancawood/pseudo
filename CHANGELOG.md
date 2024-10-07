@@ -12,7 +12,6 @@
 
 **Full Changelog**: https://github.com/ActuallyConnor/pseudo/compare/1.0.3...1.0.4
 
-
 ## 1.0.3
 
 ### Changed
