@@ -1,7 +1,7 @@
 site_name: pseudo/pseudo
 repo_url: https://github.com/ActuallyConnor/pseudo
 nav:
-  - Home: Home.md
+  - index.md
   - Pseudo\Pdo: classes/Pseudo/Pdo.md
   - Pseudo\PdoStatement: classes/Pseudo/PdoStatement.md
   - Pseudo\Result: classes/Pseudo/Result.md
