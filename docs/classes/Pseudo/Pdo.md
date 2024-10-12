@@ -7,7 +7,7 @@
 
 
 * Full name: `\Pseudo\Pdo`
-* Parent class: [`PDO`](../PDO.md)
+* Parent class: [`PDO`](https://www.php.net/manual/en/class.pdo.php)
 
 
 
@@ -118,7 +118,7 @@ public prepare(string $query, array&lt;int|string,mixed&gt; $options = []): \Pse
 
 - [`PseudoException`](./Exceptions/PseudoException.md)
 
-- [`Throwable`](../Throwable.md)
+- [`Throwable`](https://www.php.net/manual/en/class.throwable.php)
 
 
 
@@ -263,7 +263,8 @@ public query(string $query, int|null $fetchMode = null, mixed $fetchModeArgs): \
 
 **Throws:**
 
-- [`\Pseudo\Exceptions\PseudoException|\Throwable`](./Exceptions/PseudoException|/Throwable.md)
+- [`\Pseudo\Exceptions\PseudoException|`](Exceptions/PseudoException.md)
+- [\Throwable](https://www.php.net/manual/en/class.throwable.php)
 
 
 
@@ -295,9 +296,8 @@ public lastInsertId(string|null $name = null): string|false
 
 **Throws:**
 
-- [`PseudoException`](./Exceptions/PseudoException.md)
-
-- [`Throwable`](../Throwable.md)
+- [`PseudoException`](Exceptions/PseudoException.md)
+- [`\Throwable`](https://www.php.net/manual/en/class.throwable.php)
 
 
 
@@ -323,7 +323,8 @@ private getLastResult(): \Pseudo\Result|bool
 
 **Throws:**
 
-- [`\Pseudo\Exceptions\PseudoException|\Throwable`](./Exceptions/PseudoException|/Throwable.md)
+- [`\Pseudo\Exceptions\PseudoException|`](Exceptions/PseudoException.md)
+- [\Throwable](https://www.php.net/manual/en/class.throwable.php)
 
 
 

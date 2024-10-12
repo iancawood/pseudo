@@ -7,7 +7,7 @@
 
 
 * Full name: `\Pseudo\PdoStatement`
-* Parent class: [`PDOStatement`](../PDOStatement.md)
+* Parent class: [`PDOStatement`](https://www.php.net/manual/en/class.pdostatement.php)
 
 
 
@@ -451,7 +451,7 @@ public fetchObject(class-string|null $class = &quot;stdClass&quot;, array&lt;int
 
 **Throws:**
 
-- [`ReflectionException`](../ReflectionException.md)
+- [`ReflectionException`](https://www.php.net/manual/en/class.reflectionexception.php)
 
 
 
