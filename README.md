@@ -57,8 +57,6 @@ composer require --dev pseudo/pseudo
 ```php
 <?php
 class ObjectsModel {
-    private PDO $pdo;
-
     public function __construct(private readonly PDO $pdo)
     {
     }
